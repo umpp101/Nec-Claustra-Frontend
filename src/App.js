@@ -15,20 +15,16 @@ class App extends Component {
       allUsers: [],
       allConvos: [],
       currentConvos: [],
-      currentUser: {}
+      currentUser: {
+        id: '',
+        user_name: '',
+        nationality: '',
+        language: ''
+      }
     };
   }
 
-  // setCurrentUser = async() => {
-  //   const response = await fetch("http://localhost:3000/messages")
-  //   const apiData = await response.json()
-  //   this.setState({
-
-  //   })
-  // }
-
-
-  handleSubmit = (event, loginInfo) => {
+  handleLoginSubmit = (event, loginInfo) => {
     event.preventDefault();
     fetch('http://localhost:3000/login', {
       method: 'POST',
@@ -43,7 +39,44 @@ class App extends Component {
     .then(resp => resp.json())
     .then(data => {
       localStorage.setItem("token", data.jwt)
+      this.setState({
+        currentUser: {
+          id: data.user.data.attributes.id,
+          user_name: data.user.data.attributes.user_name,
+          language: data.user.data.attributes.language,
+          nationality: data.user.data.attributes.nationality
+      } } ,() => console.log(this.state.currentUser) )
     })
+    .then(() => {
+      console.log('Window history', window.history)
+      console.log('this.props.history', this.props.history)
+      this.props.history.push('/inbox');
+    })
+
+
+ 
+  };
+
+
+
+  handleSignupSubmit = (event, SignupInfo) => {
+    event.preventDefault();
+    fetch('http://localhost:3000/signup', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        user: {
+          user_name: SignupInfo.user_name,
+          password: SignupInfo.password,
+          language: SignupInfo.language,
+          nationality: SignupInfo.nationality
+        }
+      })
+    })
+    .then(resp => resp.json())
+    // .then(data => {
+    //   localStorage.setItem("token", data.jwt)
+    // })
     .then(() => {
       // console.log('History', history)
       console.log('Window history', window.history)
@@ -52,6 +85,7 @@ class App extends Component {
     })
  
   };
+
     
 
 
@@ -61,9 +95,9 @@ class App extends Component {
           <Header />
           <div className="main">
             <Route exact path="/" component={Welcome} />
-            {/* <Route exact path="/login" component={Login} handleSubmit={this.handleSubmit} /> */}
-            <Route exact path="/login" render={(props) => <Login {...props} handleSubmit={this.handleSubmit} />}  />
-            <Route exact path="/signup" component={Signup} />
+            {/* <Route exact path="/login" component={Login} handleLoginSubmit={this.handleLoginSubmit} /> */}
+            <Route exact path="/login" render={(props) => <Login {...props} handleLoginSubmit={this.handleLoginSubmit}  />}  />
+            <Route exact path="/signup" render={(props) => <Signup {...props} handleSignupSubmit={this.handleSignupSubmit} />}  />
             <Route exact path="/inbox" component={Inbox} />
   
           </div>

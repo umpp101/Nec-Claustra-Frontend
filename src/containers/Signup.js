@@ -8,7 +8,9 @@ export default class Login extends Component {
 
     this.state = {
       user_name: "",
-      password: ""
+      password: "",
+      language: "",
+      nationality: ""
     };
   }
 
@@ -21,34 +23,12 @@ export default class Login extends Component {
     },() => console.log(this.state))
   }
 
-//   handleSubmit = (e) => {
-//       e.preventDefault()
-//     // console.log('from handleSubmit: ', e.target)
-//     console.log('user-name:',this.state.user_name)
-//     console.log('password:',this.state.password)
-     
-//     fetch('http://localhost:3000/users', {
-//        method: 'POST',
-//        headers: {'Content-Type':'application/json'},
-//        body: JSON.stringify({
-//         user_name: this.state.user_name,
-//         password: this.state.password
-//        })
-//       })
-//       .then(resp => resp.json())
-//       .then(data => {
-//         console.log(data)
-//         // localStorage.setItem("token", data.jwt)
-//       })
-//     //   .then(window.history.push("/"))
-//   }
-
   render() {
     return (
 
-        <Form onSubmit={(e) => {this.props.handleSubmit(e, this.state) }}>
+        <Form onSubmit={(e) => {this.props.handleSignupSubmit(e, this.state) }}>
                     <h1>Signup</h1>
-        <Form.Group controlId="formBasicEmail">
+        <Form.Group controlId="formBasicUsername">
           <Form.Control type='text' name="user_name" placeholder="Username" onChange={(e) => this.handleChange (e)} value={this.state.user_name}/>
         
         </Form.Group>
@@ -59,6 +39,20 @@ export default class Login extends Component {
           <Form.Control type='password' name="password" placeholder="Password" onChange={(e) => this.handleChange(e)} value={this.state.password}/>
         </Form.Group>
         <br></br>
+
+
+        <Form.Group controlId="formBasicLanguage">
+          <Form.Control type='text' name="language" placeholder="Language" onChange={(e) => this.handleChange(e)} value={this.state.language}/>
+        </Form.Group>
+        <br></br>
+
+
+        <Form.Group controlId="formBasicNationality">
+          <Form.Control type='text' name="nationality" placeholder="Nationality" onChange={(e) => this.handleChange(e)} value={this.state.nationality}/>
+        </Form.Group>
+        <br></br>
+
+
         <Button variant="primary-submit" type="submit">
           Submit
         </Button>

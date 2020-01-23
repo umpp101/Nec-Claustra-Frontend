@@ -18,12 +18,12 @@ export default class Login extends Component {
     //   console.log(e.target.value)
     this.setState({
       [e.target.name]: e.target.value
-    },() => console.log(this.state))
+    })
   }
 
-//   handleSubmit = (e) => {
+//   handleLoginSubmit = (e) => {
 //       e.preventDefault()
-//     // console.log('from handleSubmit: ', e.target)
+//     // console.log('from handleLoginSubmit: ', e.target)
 //     console.log('user-name:',this.state.user_name)
 //     console.log('password:',this.state.password)
      
@@ -46,7 +46,7 @@ export default class Login extends Component {
   render() {
     return (
 
-        <Form onSubmit={(e) => {this.props.handleSubmit(e, this.state) }}>
+        <Form onSubmit={(e) => {this.props.handleLoginSubmit(e, this.state) }}>
                     <h1>Login</h1>
         <Form.Group controlId="formBasicEmail">
           <Form.Control type='text' name="user_name" placeholder="Username" onChange={(e) => this.handleChange (e)} value={this.state.user_name}/>
