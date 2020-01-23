@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import Chat from "./Chat";
 
-export default class ChatContainer extends Component {
+export default class ConvoCard extends Component {
+
+
 
 
     render() {
@@ -10,14 +11,6 @@ export default class ChatContainer extends Component {
                 <h1>Inbox</h1>
                 {/* {this.props.messages.map(message =>
                  <Chat messageId={message.id} messageContent={message.content} message_conversation_id={message.conversation_id}  />)} */}
-
-
-
-                {this.props.conversations.map(conversation => {
-                  return <Chat conversation={conversation} otherUser={this.props.users.find((user) => user.id === conversation.attributes.receiver_id)} />})
-                }
-
-                
 
 
                 {/* {this.props.users.map(user =>

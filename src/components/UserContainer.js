@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
-import User from "./User";
+import UserCard from "./UserCard";
 
 export default class UserContainer extends Component {
     render() {
         return (
             <div>
-                <h1>Users</h1>
                 {this.props.users.map(user =>
-                 <User user={user} key={user.id} />)}
+                 <UserCard user={user} key={user.id} />)}
             </div>
         )
     }

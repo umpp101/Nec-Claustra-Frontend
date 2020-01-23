@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
+import MessageCard from "./MessageCard";
 
-export default class User extends Component {
+export default class MessageContainer extends Component {
     render() {
         return (
             <div>
-                {this.props.user.user_name}
+                
             </div>
         )
     }
