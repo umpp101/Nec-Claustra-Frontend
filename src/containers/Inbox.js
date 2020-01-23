@@ -37,18 +37,23 @@ export class MainContainer extends Component {
     fetch("http://localhost:3000/conversations")
     .then(res => res.json())
     .then(result => {
+      // let filteredConvos = result["data"].filter(convo => convo.attributes.receiver_id === 8)
+      // let convoWithUsername = filteredConvos.map{(convo) => convo}
       this.setState({
-        conversations: result["conversations"]
+        // conversations: filteredConvos
+        // later we'll use current user's ID instead of 8 to filter
       });
    });
 
   }
 
+  
 
 
   render() {
     return (
       <div>
+        
        <ChatContainer messages={this.state.messages} conversations={this.state.conversations} users={this.state.users} />
           </div>
     );
