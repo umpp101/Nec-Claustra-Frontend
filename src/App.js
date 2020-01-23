@@ -55,11 +55,13 @@ class App extends Component {
         );
       })
       .then(() => {
-        // console.log('Window history', window.history)
-        // console.log('this.props.history', this.props.history)
-
+        console.log("Window history", window.history);
+        console.log("this.props.history", this.props.history);
         this.props.history.push("/inbox");
       });
+
+    // Authorization: token,
+    // const token = localStorage.getItem("token")
   };
 
   handleSignupSubmit = (event, SignupInfo) => {
@@ -78,7 +80,6 @@ class App extends Component {
     })
       .then(resp => resp.json())
       .then(() => {
-        console.log("Window history", window.history);
         console.log("this.props.history", this.props.history);
         this.props.history.push("/inbox");
       });
