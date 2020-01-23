@@ -23,8 +23,8 @@ class App extends Component {
       }
     };
   }
-
-
+  
+  
   handleLoginSubmit = (event, loginInfo) => {
     event.preventDefault();
     fetch('http://localhost:3000/login', {
@@ -54,6 +54,8 @@ class App extends Component {
       this.props.history.push('/inbox');
     })
 
+    // Authorization: token,
+    // const token = localStorage.getItem("token")
 
  
   };
@@ -76,7 +78,7 @@ class App extends Component {
     })
     .then(resp => resp.json())
     .then(() => {
-      console.log('Window history', window.history)
+      // console.log('Window history', window.history)
       console.log('this.props.history', this.props.history)
       this.props.history.push('/inbox');
 
