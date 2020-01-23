@@ -78,7 +78,6 @@ class App extends Component {
     })
     .then(resp => resp.json())
     .then(() => {
-      // console.log('Window history', window.history)
       console.log('this.props.history', this.props.history)
       this.props.history.push('/inbox');
 
