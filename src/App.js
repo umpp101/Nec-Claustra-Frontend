@@ -19,13 +19,6 @@ class App extends Component {
     };
   }
 
-  // setCurrentUser = async() => {
-  //   const response = await fetch("http://localhost:3000/messages")
-  //   const apiData = await response.json()
-  //   this.setState({
-
-  //   })
-  // }
 
 
   handleSubmit = (event, loginInfo) => {
@@ -45,14 +38,22 @@ class App extends Component {
       localStorage.setItem("token", data.jwt)
     })
     .then(() => {
-      // console.log('History', history)
       console.log('Window history', window.history)
       console.log('this.props.history', this.props.history)
       this.props.history.push('/inbox');
+
     })
  
   };
     
+  handleLogout = () => {
+    localStorage.removeItem("token")
+    this.props.history.push('/')
+    this.setState({
+      currentUser: {}
+    })
+  }
+
 
 
   render() {
@@ -61,7 +62,6 @@ class App extends Component {
           <Header />
           <div className="main">
             <Route exact path="/" component={Welcome} />
-            {/* <Route exact path="/login" component={Login} handleSubmit={this.handleSubmit} /> */}
             <Route exact path="/login" render={(props) => <Login {...props} handleSubmit={this.handleSubmit} />}  />
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/inbox" component={Inbox} />

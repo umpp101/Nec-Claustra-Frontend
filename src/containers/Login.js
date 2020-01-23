@@ -21,28 +21,6 @@ export default class Login extends Component {
     },() => console.log(this.state))
   }
 
-//   handleSubmit = (e) => {
-//       e.preventDefault()
-//     // console.log('from handleSubmit: ', e.target)
-//     console.log('user-name:',this.state.user_name)
-//     console.log('password:',this.state.password)
-     
-//     fetch('http://localhost:3000/users', {
-//        method: 'POST',
-//        headers: {'Content-Type':'application/json'},
-//        body: JSON.stringify({
-//         user_name: this.state.user_name,
-//         password: this.state.password
-//        })
-//       })
-//       .then(resp => resp.json())
-//       .then(data => {
-//         console.log(data)
-//         // localStorage.setItem("token", data.jwt)
-//       })
-//     //   .then(window.history.push("/"))
-//   }
-
   render() {
     return (
 
