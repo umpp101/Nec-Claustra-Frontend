@@ -54,27 +54,26 @@ class App extends Component {
               nationality: data.user.data.attributes.nationality
             }
           },
-          () => console.log(this.state.currentUser)
+          // () => console.log(this.state.currentUser)
         );
       })
       .then(() => {
-        this.props.history.push("/inbox");
+        // fetch(
+        //   `http://localhost:3000/conversations?user=${this.state.currentUser.id}`
+        // )
+        //   .then(resp => resp.json())
+        //   .then(apiData => {
+        //     this.setState(
+        //       {
+        //         conversations: apiData
+        //       },
+        //      // () => console.log(apiData)
+        //     );
+        //   });
+        this.fetchCurrentUserConvos();
       })
-
-
       .then(() => {
-        fetch(
-          `http://localhost:3000/conversations?user=${this.state.currentUser.id}`
-        )
-          .then(resp => resp.json())
-          .then(apiData => {
-            this.setState(
-              {
-                conversations: apiData
-              },
-              () => console.log(apiData)
-            );
-          });
+        this.props.history.push("/inbox");
       });
 
 
@@ -116,67 +115,27 @@ class App extends Component {
   
 
   fetchCurrentUserConvos = async() => {
-    const response = await fetch(`http://localhost:3000/conversations?user=${this.state.currentUser.id}`)
+    const response = await fetch(`http://localhost:3000/myconvos/${this.state.currentUser.id}`,{
+      method: 'GET',
+      headers: {
+       'Authorization': localStorage.getItem('token'),
+       'Content-Type': 'application/json',
+       'Accept': 'application/json'
+      }
+    })
     const apiData = await response.json()
-    this.setState({
-      currentUserConvos: apiData
-    },() => console.log(apiData))
+    console.log(response)
+    // this.setState({
+    //   currentUserConvos: apiData
+    // })
   }
 
-  componentDidMount(){
-    this.fetchCurrentUserConvos()
-  }
-  // fetchUsers = async() => {
-  //   const response = await fetch("http://localhost:3000/users")
-  //   const apiData = await response.json()
-  //   this.setState({
-  //     users: apiData
-  //   })
-  // }
-
-  // fetchConversations = async() => {
-  //   const response = await fetch("http://localhost:3000/conversations")
-  //   const apiData = await response.json()
-  //   this.setState({
-  //     conversations: apiData
-  //   },() => console.log(apiData))
-  // }
-
-
-  // componentDidMount() {
-  //   fetch("http://localhost:3000/users")
-  //     .then(res => res.json())
-  //     .then(result => {
-  //       this.setState({
-  //         users: result["users"]
-  //       });
-  //     });
-
-  //   fetch("http://localhost:3000/messages")
-  //     .then(res => res.json())
-  //     .then(result => {
-  //       this.setState({
-  //         messages: result["messages"]
-  //       });
-  //     });
-
-  //   fetch("http://localhost:3000/conversations")
-  //     .then(res => res.json())
-  //     .then(result => {
-  //       // let filteredConvos = result["data"].filter(convo => convo.attributes.receiver_id === 8)
-  //       // let convoWithUsername = filteredConvos.map{(convo) => convo}
-  //       this.setState({
-  //         // conversations: filteredConvos
-  //         // later we'll use current user's ID instead of 8 to filter
-  //       });
-  //     });
-  // }
 
   render() {
  
     return (
       <div className="App">
-        <Header />
+        <Header currentUser={this.state.currentUser} />
         <div className="main">
           <Switch>
             <Route exact path="/" component={Welcome} />
@@ -202,7 +161,7 @@ class App extends Component {
               exact
               path="/inbox"
               render={props => (
-                <Inbox {...props} myConvos={this.state.currentUserConvos} />
+                <Inbox {...props} currentUserConvos={this.state.currentUserConvos} />
               )}
             />
             ) : (
