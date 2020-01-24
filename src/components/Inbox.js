@@ -10,8 +10,9 @@ export default class Inbox extends Component {
   render() {
     return (
       <div>
-        
-       <ConvoCard  />
+        {/* {console.log(this.props.allConversations)} */}
+       {/* {this.props.allConversations["conversations"].map(convo =>
+        <ConvoCard convo={convo} key={convo.id} />)} */}
           </div>
     );
   }
