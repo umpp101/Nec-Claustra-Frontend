@@ -5,28 +5,31 @@ import ConvoCard from "./ConvoCard";
 
 export default class Inbox extends Component {
  
-  // findInboxUsers = () => {
-  //   if (receiver.id !== currentUser.id){
-  //     return 
-  //   }
-  // }
 
 
   render() {
     return (
-      <div>
-        <h1>Welcome</h1>
-        {/* {console.log(this.props.currentUserConvos["conversations"])} */}
-        
-       {/* {this.props.currentUserConvos["conversations"].map(convo =>
-        <ConvoCard convo={convo} key={convo.id} />)} */}
+      <div class="chat-container">
+          <div class="chat">
+              <div class="language-select-container">
 
+                  <div class="form-group">
+                      <label for="languageSelector">Please select a language</label>
+                      <select class="form-control" id="languageSelector">
+                      </select>
+                  </div>
+              </div>
 
+              <ul class="row message-container" id="channel-status" ></ul>
 
-{/* 
-         {this.props.currentUserConvos["conversations"].forEach(convo => console.log(convo))}
-          */}
+              <div class="input-container">
+                  <div class="row text-input-container">
+                      <input type="text" class="text-input" id="input-field"/>
+                      <input id="publish" class="input-button" type="submit" value="Send"/>
+                  </div>
+              </div>
           </div>
+      </div>
     );
   }
 }
