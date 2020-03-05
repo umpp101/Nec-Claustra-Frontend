@@ -5,15 +5,9 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Header from "./containers/Header";
 import Inbox from "./components/Inbox";
-// import ShowConvo from "./components/ShowConvo";
-// import NewConvo from "./components/NewConvo";
-import {
-  BrowserRouter as Router,
-  Route,
-  withRouter,
-  Redirect,
-  Switch
-} from "react-router-dom";
+
+import * as reactRouterDom from "react-router-dom";
+console.log(process.env.REACT_APP_KEY)
 
 class App extends Component {
   constructor() {
@@ -21,16 +15,14 @@ class App extends Component {
 
     this.state = {
       currentUser: {},
-      currentUserConvos: [],
       currentConvo: {},
-      allUsers: [],
+      allUsers: []
+      // currentUserConvos: {},
       // messages: [],
       // conversations: [],
     }
     this.socket = undefined;
   }
-
-
 
   handleLoginSubmit = (event, loginInfo) => {
     event.preventDefault();
@@ -59,6 +51,7 @@ class App extends Component {
           // () => console.log(this.state.currentUser)
         );
       })
+      .catch((error) => (console.log(error)))
       .then(() => {
         this.fetchUsers();
       })
@@ -71,6 +64,7 @@ class App extends Component {
   };
 
   handleSignupSubmit = (event, SignupInfo) => {
+    // console.log(event)
     event.preventDefault();
     fetch("http://localhost:3000/signup", {
       method: "POST",
@@ -119,7 +113,7 @@ class App extends Component {
             }
           })
         })
-      // .then(() => this.fetchPosts())
+        .catch((error) => (console.log(error)))
       // .then(() => this.fetchcurrentUserConvos())
 
     }
@@ -193,9 +187,9 @@ class App extends Component {
 
         let currentConvoIds = this.state.currentConvo.messages && this.state.currentConvo.messages.map(msg => (msg.id))
         // let myConvoIds = this.state.currentUserConvos.messages.map(msg => (msg.id))
-        console.log("first condition:", data.message !== undefined)
-        console.log("second condition:", !!data.message.true_message === true)
-        console.log(data)
+        // console.log("first condition:", data.message !== undefined)
+        // console.log("second condition:", !!data.message.true_message === true)
+        // console.log(data)
         // console.log("third condition:", !currentConvoIds.includes(data.message.true_message.id))
 
         if (data.message !== undefined && !!data.message.true_message === true && !currentConvoIds.includes(data.message.true_message.id)) {
@@ -233,6 +227,7 @@ class App extends Component {
   }
   handleSendEvent = (message, event) => {
     event.preventDefault()
+    // console.log(this.state)
     console.log(this.socket)
     const msg = {
       command: 'message',
@@ -244,8 +239,7 @@ class App extends Component {
         message: {
           content: message,
           user_id: this.state.currentUser.id,
-          conversation_id: this.state.currentConvo.id,
-          // conversation_id: 3,
+          conversation_id: this.state.currentConvo.id
         }
       })
     }
@@ -253,6 +247,7 @@ class App extends Component {
   }
   handleNewConvoSubmit = async (e, selectedUser) => {
     console.log(selectedUser.target.value)
+    // #write something that prevents
     e.preventDefault();
     const fetchUrl = (`http://localhost:3000/users/${this.state.currentUser.id}/conversations`);
     const settings = {
@@ -274,18 +269,18 @@ class App extends Component {
     if (!!postData.error === true) return null
     // console.log(postData.error)
     await this.setState({
-      currentUserConvos: [...this.state.currentUserConvos, { ...postData.conversation }]
+      currentConvo: postData.conversation
     })
     //   this.props.history.push('/homepage')
   }
 
-  setConvo = (obj) => {
-    this.setState({
-      currentConvo: obj
-    }
-      // , ()=> this.getOtherUserName()
-    )
-  }
+  // setConvo = (obj) => {
+  //   this.setState({
+  //     currentConvo: obj
+  //   }
+  //     // , ()=> this.getOtherUserName()
+  //   )
+  // }
 
   render() {
 
@@ -293,16 +288,16 @@ class App extends Component {
       <div className="App">
         <Header currentUser={this.state.currentUser} />
         <div className="main">
-          <Switch>
-            <Route exact path="/" component={Welcome} />
-            <Route
+          <reactRouterDom.Switch>
+            <reactRouterDom.Route exact path="/" component={Welcome} />
+            <reactRouterDom.Route
               exact
               path="/login"
               render={props => (
                 <Login {...props} handleLoginSubmit={this.handleLoginSubmit} />
               )}
             />
-            <Route
+            <reactRouterDom.Route
               exact
               path="/signup"
               render={props => (
@@ -313,16 +308,14 @@ class App extends Component {
               )}
             />
             {Object.keys(this.state.currentUser).length !== 0 ? (
-              <Route
+              <reactRouterDom.Route
                 exact
                 path="/inbox"
                 render={props => (
                   <Inbox {...props}
                     currentUser={this.state.currentUser}
-                    currentUserConvos={this.state.currentUserConvos}
                     currentConvo={this.state.currentConvo}
                     allUsers={this.state.allUsers}
-                    currentUserConvos={this.state.currentUserConvos}
                     openWsConnection={this.openWsConnection}
                     handleSendEvent={this.handleSendEvent}
                     handleNewConvo={this.handleNewConvoSubmit}
@@ -330,13 +323,13 @@ class App extends Component {
                 )}
               />
             ) : (
-                <Redirect to="/login" />
+                <reactRouterDom.Redirect to="/login" />
               )}
-          </Switch>
+          </reactRouterDom.Switch>
         </div>
       </div>
     );
   }
 }
 
-export default withRouter(App);
+export default reactRouterDom.withRouter(App);

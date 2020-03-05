@@ -46,28 +46,24 @@ export default class Inbox extends Component {
   render() {
     return (
       <div class="chat-container">
-        <div>
+        {/* <div>
           {this.props.currentUserConvos.map(convo => < ConvoCard
             setConvo={this.props.setConvo}
             convo={convo} key={convo.id}
             allUsers={this.props.allUsers}
             currentUser={this.props.currentUser} />)}
-        </div>
+        </div> */}
         <div class="chat">
-          <div class="language-select-container">
-
+          <div class="user-select-container">
             <div class="form-group">
-              <label for="languageSelector">Please select a language</label>
-              <select class="form-control" id="languageSelector">
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="languageSelector">Please select Who you'd like to chat with </label>
-              <select class="form-control" id="languageSelector"
-                onChange={(e) => { this.props.handleNewConvo(e, e) }}>
-                {this.props.allUsers.map(user =>
-                  <option key={user.key} value={user.id}>{user.user_name.charAt(0).toUpperCase() + user.user_name.slice(1)}</option>)};
-              </select>
+              <label for="userSelector">Please select Who you'd like to chat with </label>
+              <select class="form-control" id="userSelector"
+                onClick={(e) => { this.props.handleNewConvo(e, e) }}>
+                {this.props.allUsers.map(user => {
+              // this makes sure that i don't have an options of making a convo with myself(frontend Wise)
+                 return user.id != this.props.currentUser.id && 
+                <option key={user.key} value={user.id}>{user.user_name.charAt(0).toUpperCase() + user.user_name.slice(1)}</option>})}
+                </select>
             </div>
           </div>
 

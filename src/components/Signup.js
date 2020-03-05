@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Form, Button } from "react-bootstrap";
-
+import languages from "../Languages"
 
 export default class Login extends Component {
   constructor() {
@@ -41,9 +41,12 @@ export default class Login extends Component {
         <br></br>
 
 
-        <Form.Group controlId="formBasicLanguage">
-          <Form.Control type='text' name="language" placeholder="Language" onChange={(e) => this.handleChange(e)} value={this.state.language}/>
-        </Form.Group>
+        
+        <select class="form-control" name="language" id="languageSelector"
+                onChange={(e) => this.handleChange(e)}>
+                {languages.map(lang =>
+                  <option value={lang.language}>{lang.name}</option>)};
+        </select>
         <br></br>
 
 

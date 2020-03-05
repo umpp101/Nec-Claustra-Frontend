@@ -98,12 +98,12 @@ html {
   border: 1px solid #e1e1e8;
   border-radius: 5px;
 }
-.language-select-container {
+.user-select-container {
   background-color: #ffffff;
   padding: 20px 40px 20px;
   border-radius: 5px 5px 0 0;
 }
-.language-select-container select {
+.user-select-container select {
   height: 30px;
   margin-left: 20px;
   font-size: 14px;
