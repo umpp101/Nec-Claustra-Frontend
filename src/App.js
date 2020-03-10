@@ -7,7 +7,6 @@ import Header from "./containers/Header";
 import Inbox from "./components/Inbox";
 
 import * as reactRouterDom from "react-router-dom";
-console.log(process.env.REACT_APP_KEY)
 
 class App extends Component {
   constructor() {
@@ -16,10 +15,8 @@ class App extends Component {
     this.state = {
       currentUser: {},
       currentConvo: {},
-      allUsers: []
-      // currentUserConvos: {},
-      // messages: [],
-      // conversations: [],
+      allUsers: [],
+      currentUserConvos: {}
     }
     this.socket = undefined;
   }
@@ -92,6 +89,7 @@ class App extends Component {
 
   componentDidMount() {
     this.fetchUsers()
+    this.fetchCurrentUserConvos()
 
     if (localStorage.getItem("token") !== null) {
 
@@ -131,7 +129,7 @@ class App extends Component {
   fetchCurrentUserConvos = async () => {
     const response = await fetch(`http://localhost:3000/users/${this.state.currentUser.id}/conversations`)
     const apiData = await response.json()
-    // console.log(apiData)
+    console.log(apiData)
     this.setState({
       currentUserConvos: apiData.conversations
     })
@@ -159,6 +157,7 @@ class App extends Component {
         identifier: JSON.stringify({
           channel: "ChatChannel"
         })
+        // identifier: 'ChatChannel'
       }
       this.socket.send(JSON.stringify(msg))
 
@@ -174,6 +173,7 @@ class App extends Component {
           identifier: JSON.stringify({
             channel: "ChatChannel"
           }),
+          // identifier: 'ChatChannel',
           data: JSON.stringify({
             action: 'convo_connector',
             message: JSON.stringify({
@@ -234,7 +234,9 @@ class App extends Component {
       identifier: JSON.stringify({
         channel: "ChatChannel"
       }),
+      // identifier: 'ChatChannel',
       data: JSON.stringify({
+        // #this goes to the SPEAK Method in ChatChannel
         action: 'speak',
         message: {
           content: message,
@@ -274,13 +276,6 @@ class App extends Component {
     //   this.props.history.push('/homepage')
   }
 
-  // setConvo = (obj) => {
-  //   this.setState({
-  //     currentConvo: obj
-  //   }
-  //     // , ()=> this.getOtherUserName()
-  //   )
-  // }
 
   render() {
 
