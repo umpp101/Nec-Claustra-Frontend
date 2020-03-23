@@ -12,6 +12,36 @@ export default class Login extends Component {
     };
   }
 
+  handleLoginSubmit = event => {
+    event.preventDefault();
+    fetch("http://localhost:3000/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        user: {
+          user_name: this.state['user_name'],
+          password: this.state.password
+        }
+      })
+    })
+      .then(resp => resp.json())
+      .then(data => {
+        localStorage.setItem("token", data.jwt);
+        
+        const currentUser = {
+          id: data.user.data.attributes.id,
+          user_name: data.user.data.attributes.user_name,
+          language: data.user.data.attributes.language,
+          nationality: data.user.data.attributes.nationality
+        };
+        this.props.updateCurrentUser({ currentUser })
+      })
+      .catch((error) => (console.log(error)))
+      .then(() => {
+        this.props.history.push("/inbox");
+      });
+    }
+
  
 
   handleChange = (e) => {
@@ -24,8 +54,7 @@ export default class Login extends Component {
 
   render() {
     return (
-
-        <Form onSubmit={(e) => {this.props.handleLoginSubmit(e, this.state) }}>
+        <Form onSubmit={this.handleLoginSubmit}>
                     <h1>Login</h1>
         <Form.Group controlId="formBasicEmail">
           <Form.Control type='text' name="user_name" placeholder="Username" onChange={(e) => this.handleChange (e)} value={this.state.user_name}/>

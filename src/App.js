@@ -21,44 +21,10 @@ class App extends Component {
     this.socket = undefined;
   }
 
-  handleLoginSubmit = (event, loginInfo) => {
-    event.preventDefault();
-    fetch("http://localhost:3000/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        user: {
-          user_name: loginInfo.user_name,
-          password: loginInfo.password
-        }
-      })
-    })
-      .then(resp => resp.json())
-      .then(data => {
-        localStorage.setItem("token", data.jwt);
-        this.setState(
-          {
-            currentUser: {
-              id: data.user.data.attributes.id,
-              user_name: data.user.data.attributes.user_name,
-              language: data.user.data.attributes.language,
-              nationality: data.user.data.attributes.nationality
-            }
-          },
-          // () => console.log(this.state.currentUser)
-        );
-      })
-      .catch((error) => (console.log(error)))
-      .then(() => {
-        this.fetchUsers();
-      })
-      .then(() => {
-        this.fetchCurrentUserConvos();
-      })
-      .then(() => {
-        this.props.history.push("/inbox");
-      });
-  };
+  updateCurrentUser = ({ currentUser }) => this.setState({ currentUser })
+  // when currentUser changes, fetch
+  // this.fetchUsers();
+  // this.fetchCurrentUserConvos();
 
   handleSignupSubmit = (event, SignupInfo) => {
     // console.log(event)
@@ -87,34 +53,39 @@ class App extends Component {
       })
   };
 
-  componentDidMount() {
-    this.fetchUsers()
-    this.fetchCurrentUserConvos()
-
-    if (localStorage.getItem("token") !== null) {
-
-      fetch("http://localhost:3000/reAuth", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          'Authorization': localStorage.getItem("token")
-        }
-      })
-        .then(res => res.json())
-        .then((data) => {
-          console.log(data);
-          this.setState({
-            currentUser: {
-              id: Number(data.user.data.id),
-              ...data.user.data.attributes
-            }
-          })
-        })
-        .catch((error) => (console.log(error)))
-      // .then(() => this.fetchcurrentUserConvos())
-
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.currentUser?.id !== prevState.currentUser?.id) {
+      this.fetchUsers();
+      this.fetchCurrentUserConvos();
     }
+  }
+
+  componentDidMount() {
+    console.log('comp mounted');
+    // if (localStorage.getItem("token") !== null) {
+
+    //   fetch("http://localhost:3000/reAuth", {
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Accept: "application/json",
+    //       'Authorization': localStorage.getItem("token")
+    //     }
+    //   })
+    //     .then(res => res.json())
+    //     .then((data) => {
+    //       console.log(data);
+    //       this.setState({
+    //         currentUser: {
+    //           id: Number(data.user.data.id),
+    //           ...data.user.data.attributes
+    //         }
+    //       })
+    //     })
+    //     .catch((error) => (console.log(error)))
+    //   // .then(() => this.fetchcurrentUserConvos())
+
+    // }
   }
 
   handleLogout = () => {
@@ -124,7 +95,6 @@ class App extends Component {
       currentUser: {}
     });
   };
-
 
   fetchCurrentUserConvos = async () => {
     const response = await fetch(`http://localhost:3000/users/${this.state.currentUser.id}/conversations`)
@@ -289,7 +259,7 @@ class App extends Component {
               exact
               path="/login"
               render={props => (
-                <Login {...props} handleLoginSubmit={this.handleLoginSubmit} />
+                <Login {...props} updateCurrentUser={this.updateCurrentUser} />
               )}
             />
             <reactRouterDom.Route
