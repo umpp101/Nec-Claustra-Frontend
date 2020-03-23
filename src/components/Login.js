@@ -12,7 +12,7 @@ export default class Login extends Component {
     };
   }
 
-  handleLoginSubmit = event => {
+  handleLoginSubmit = (event) => {
     event.preventDefault();
     fetch("http://localhost:3000/login", {
       method: "POST",
