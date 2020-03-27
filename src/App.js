@@ -7,7 +7,6 @@ import Header from "./containers/Header";
 import Inbox from "./components/Inbox";
 
 import * as reactRouterDom from "react-router-dom";
-console.log(process.env.REACT_APP_KEY)
 
 class App extends Component {
   constructor() {
@@ -16,83 +15,26 @@ class App extends Component {
     this.state = {
       currentUser: {},
       currentConvo: {},
-      allUsers: []
-      // currentUserConvos: {},
-      // messages: [],
-      // conversations: [],
+      allUsers: [],
+      currentUserConvos: {}
     }
     this.socket = undefined;
   }
 
-  handleLoginSubmit = (event, loginInfo) => {
-    event.preventDefault();
-    fetch("http://localhost:3000/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        user: {
-          user_name: loginInfo.user_name,
-          password: loginInfo.password
-        }
-      })
-    })
-      .then(resp => resp.json())
-      .then(data => {
-        localStorage.setItem("token", data.jwt);
-        this.setState(
-          {
-            currentUser: {
-              id: data.user.data.attributes.id,
-              user_name: data.user.data.attributes.user_name,
-              language: data.user.data.attributes.language,
-              nationality: data.user.data.attributes.nationality
-            }
-          },
-          // () => console.log(this.state.currentUser)
-        );
-      })
-      .catch((error) => (console.log(error)))
-      .then(() => {
-        this.fetchUsers();
-      })
-      .then(() => {
-        this.fetchCurrentUserConvos();
-      })
-      .then(() => {
-        this.props.history.push("/inbox");
-      });
-  };
+  updateCurrentUser = ({ currentUser }) => this.setState({ currentUser })
+  // when currentUser changes, fetch
+  // this.fetchUsers();
+  // this.fetchCurrentUserConvos();
 
-  handleSignupSubmit = (event, SignupInfo) => {
-    // console.log(event)
-    event.preventDefault();
-    fetch("http://localhost:3000/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        user: SignupInfo
-      })
-    })
-      .then(resp => resp.json())
-      .then(resp => {
-        localStorage.setItem("token", resp.jwt);
-        this.setState({
-          currentUser: {
-            id: resp.user.data.attributes.id,
-            user_name: resp.user.data.attributes.user_name,
-            language: resp.user.data.attributes.language,
-            nationality: resp.user.data.attributes.nationality
-          }
-        });
-      })
-      .then(() => {
-        this.props.history.push("/inbox");
-      })
-  };
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.currentUser?.id !== prevState.currentUser?.id) {
+      this.fetchUsers();
+      this.fetchCurrentUserConvos();
+    }
+  }
 
   componentDidMount() {
-    this.fetchUsers()
-
+    console.log('comp mounted');
     if (localStorage.getItem("token") !== null) {
 
       fetch("http://localhost:3000/reAuth", {
@@ -127,11 +69,10 @@ class App extends Component {
     });
   };
 
-
   fetchCurrentUserConvos = async () => {
     const response = await fetch(`http://localhost:3000/users/${this.state.currentUser.id}/conversations`)
     const apiData = await response.json()
-    // console.log(apiData)
+    console.log(apiData)
     this.setState({
       currentUserConvos: apiData.conversations
     })
@@ -159,6 +100,7 @@ class App extends Component {
         identifier: JSON.stringify({
           channel: "ChatChannel"
         })
+        // identifier: 'ChatChannel'
       }
       this.socket.send(JSON.stringify(msg))
 
@@ -174,6 +116,7 @@ class App extends Component {
           identifier: JSON.stringify({
             channel: "ChatChannel"
           }),
+          // identifier: 'ChatChannel',
           data: JSON.stringify({
             action: 'convo_connector',
             message: JSON.stringify({
@@ -234,7 +177,9 @@ class App extends Component {
       identifier: JSON.stringify({
         channel: "ChatChannel"
       }),
+      // identifier: 'ChatChannel',
       data: JSON.stringify({
+        // #this goes to the SPEAK Method in ChatChannel
         action: 'speak',
         message: {
           content: message,
@@ -274,13 +219,6 @@ class App extends Component {
     //   this.props.history.push('/homepage')
   }
 
-  // setConvo = (obj) => {
-  //   this.setState({
-  //     currentConvo: obj
-  //   }
-  //     // , ()=> this.getOtherUserName()
-  //   )
-  // }
 
   render() {
 
@@ -294,17 +232,14 @@ class App extends Component {
               exact
               path="/login"
               render={props => (
-                <Login {...props} handleLoginSubmit={this.handleLoginSubmit} />
+                <Login {...props} updateCurrentUser={this.updateCurrentUser} />
               )}
             />
             <reactRouterDom.Route
               exact
               path="/signup"
               render={props => (
-                <Signup
-                  {...props}
-                  handleSignupSubmit={this.handleSignupSubmit}
-                />
+                <Signup {...props} updateCurrentUser={this.updateCurrentUser} />
               )}
             />
             {Object.keys(this.state.currentUser).length !== 0 ? (

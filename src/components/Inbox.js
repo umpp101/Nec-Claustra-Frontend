@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ConvoCard from "./ConvoCard";
+// import ConvoCard from "./ConvoCard";
 
 
 export default class Inbox extends Component {
@@ -46,13 +46,7 @@ export default class Inbox extends Component {
   render() {
     return (
       <div class="chat-container">
-        {/* <div>
-          {this.props.currentUserConvos.map(convo => < ConvoCard
-            setConvo={this.props.setConvo}
-            convo={convo} key={convo.id}
-            allUsers={this.props.allUsers}
-            currentUser={this.props.currentUser} />)}
-        </div> */}
+
         <div class="chat">
           <div class="user-select-container">
             <div class="form-group">
