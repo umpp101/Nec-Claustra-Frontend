@@ -1,23 +1,28 @@
-import React, { Component } from "react";
+import React, { Component } from 'react'
 // import ConvoCard from "./ConvoCard";
-
+import Search from "./Search"
+import PeopleList from "./PeopleList"
+import CurrentChatHeader from './CurrentChatHeader'
+import Messages from './Messages'
+import NewMessage from './NewMessage'
 
 export default class Inbox extends Component {
   constructor(props) {
     super(props)
-
+  
     this.state = {
-      currentChatMessage: '',
-      selectedUser: ''
+       searchedUsers: []
     }
   }
 
-  updateCurrentChatMessage = (event) => {
+  searchForUsers = (event) => {
     console.log(event.target.value)
+    let searchResult = this.props.allUsers.filter(user =>user.user_name.includes(event.target.value));
+    console.log(searchResult)
     this.setState({
-      currentChatMessage: event.target.value
-    });
-  }
+      searchedUsers: searchResult
+    }, () => console.log(this.state.searchedUsers));
+  };
 
   componentDidMount() {
     if (Object.keys(this.props.currentUser).length !== 0) {
@@ -25,57 +30,37 @@ export default class Inbox extends Component {
     }
   }
 
-
-  renderMessages = () => {
-    if (Object.keys(this.props.currentConvo).length !== 0) {
-      return this.props.currentConvo.messages.map(msg => {
-        // const actualTime = new Intl.DateTimeFormat('en-US', {hour: '2-digit', minute: '2-digit'}).format(msg.created_at)
-        return (
-          <li class="message">
-            <div class="message-info">
-              <h5 class="message-name">{this.props.currentUser.user_name}</h5>
-              <p class="message-text">{msg.content}</p>
-            </div>
-            <span class="message-time">{msg.created_at}</span>
-          </li>
-        )
-      })
-    }
-  };
-
   render() {
+    console.log(this.props)
     return (
-      <div class="chat-container">
-
-        <div class="chat">
-          <div class="user-select-container">
-            <div class="form-group">
-              <label for="userSelector">Please select Who you'd like to chat with </label>
-              <select class="form-control" id="userSelector"
-                onClick={(e) => { this.props.handleNewConvo(e, e) }}>
-                {this.props.allUsers.map(user => {
-              // this makes sure that i don't have an options of making a convo with myself(frontend Wise)
-                 return user.id != this.props.currentUser.id && 
-                <option key={user.key} value={user.id}>{user.user_name.charAt(0).toUpperCase() + user.user_name.slice(1)}</option>})}
-                </select>
-            </div>
+      <div className="container clearfix">
+        <div className="people-list" id="people-list">
+          <Search 
+          allUsers={this.props.allUsers}
+          searchForUsers={this.searchForUsers}/>
+          {this.props.myConvos.map(convo =>
+            <PeopleList
+                getUserNameById={this.props.getUserNameById}
+                setConvo={this.props.setConvo}
+                allUsers={this.props.allUsers}
+                convo={convo} key={convo.id}
+                currentUser={this.props.currentUser} />)}
+        </div>
+        <div className="chat">
+          <CurrentChatHeader
+            currentConvo={this.props.currentConvo}
+          />
+          <div className="chat-history">
+           <Messages
+              currentConvo={this.props.currentConvo}
+              currentUser={this.props.currentUser} />
           </div>
-
-          <ul class="row message-container" id="channel-status" >{this.renderMessages()}</ul>
-          <div class="input-container">
-
-            <div class="row text-input-container">
-
-              <input type="text" class="text-input" id="input-field" placeholder="Enter your message..."
-                value={this.state.currentChatMessage}
-                onChange={e => this.updateCurrentChatMessage(e)}
-                required="required"
-              />
-              <input class="input-button" type="submit" value="Send" onClick={event => this.props.handleSendEvent(this.state.currentChatMessage, event)} />
-            </div>
-          </div>
+          <NewMessage
+            handleSendEvent={this.props.handleSendEvent} />
         </div>
       </div>
+
+
     );
   }
 }

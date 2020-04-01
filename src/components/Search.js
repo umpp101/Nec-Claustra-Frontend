@@ -1,11 +1,14 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export default class Search extends Component {
-    render() {
-        return (
-            <div>
-                
-            </div>
-        )
-    }
+function Search(props) {
+    return (
+        <div className="search">
+        <input type="text" placeholder="search" 
+        onChange={(event) => props.searchForUsers(event)}/>
+        <i className="fa fa-search"></i>
+    </div>
+    )
 }
+
+export default Search
+

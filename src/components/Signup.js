@@ -67,7 +67,7 @@ export default class Login extends Component {
           <Form.Control type='password' name="password" placeholder="Password" onChange={(e) => this.handleChange(e)} value={this.state.password} />
         </Form.Group>
         <br></br>
-        <select class="form-control" name="language" id="languageSelector"
+        <select className="form-control" name="language" id="languageSelector"
           onChange={(e) => this.handleChange(e)}>
           {languages.map(lang =>
             <option value={lang.language}>{lang.name}</option>)};
