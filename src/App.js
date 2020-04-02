@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import "./App.css";
+import './Inbox.scss'
 import Welcome from "./components/Welcome";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Header from "./containers/Header";
 import Inbox from "./components/Inbox";
 
-import * as reactRouterDom from "react-router-dom";
+import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 
 class App extends Component {
   constructor() {
@@ -16,20 +17,21 @@ class App extends Component {
       currentUser: {},
       currentConvo: {},
       allUsers: [],
-      currentUserConvos: {}
+      myConvos: {}
     }
     this.socket = undefined;
   }
 
+  
   updateCurrentUser = ({ currentUser }) => this.setState({ currentUser })
   // when currentUser changes, fetch
   // this.fetchUsers();
-  // this.fetchCurrentUserConvos();
+  // this.fetchMyConvos();
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.currentUser?.id !== prevState.currentUser?.id) {
       this.fetchUsers();
-      this.fetchCurrentUserConvos();
+      this.fetchMyConvos();
     }
   }
 
@@ -56,7 +58,7 @@ class App extends Component {
           })
         })
         .catch((error) => (console.log(error)))
-      // .then(() => this.fetchcurrentUserConvos())
+      // .then(() => this.fetchMyConvos())
 
     }
   }
@@ -69,12 +71,19 @@ class App extends Component {
     });
   };
 
-  fetchCurrentUserConvos = async () => {
+  fetchMyConvos = async () => {
     const response = await fetch(`http://localhost:3000/users/${this.state.currentUser.id}/conversations`)
     const apiData = await response.json()
     console.log(apiData)
     this.setState({
-      currentUserConvos: apiData.conversations
+      myConvos: apiData.conversations
+    })
+  }
+
+
+  setConvo = (obj) => {
+    this.setState({
+      currentConvo: obj
     })
   }
 
@@ -87,6 +96,12 @@ class App extends Component {
       allUsers: users,
       loading: false
     })
+  }
+  getUserNameById = (id) => {
+    if (this.state.allUsers.length !== 0) {
+      let user = this.state.allUsers.find(user => user.id === id)
+      return user.first_name.charAt(0).toUpperCase() + user.user_name.slice(1)
+    }
   }
 
   openWsConnection = async () => {
@@ -129,16 +144,13 @@ class App extends Component {
 
 
         let currentConvoIds = this.state.currentConvo.messages && this.state.currentConvo.messages.map(msg => (msg.id))
-        // let myConvoIds = this.state.currentUserConvos.messages.map(msg => (msg.id))
+        // let myConvoIds = this.state.myConvos.messages.map(msg => (msg.id))
         // console.log("first condition:", data.message !== undefined)
         // console.log("second condition:", !!data.message.true_message === true)
         // console.log(data)
         // console.log("third condition:", !currentConvoIds.includes(data.message.true_message.id))
-
         if (data.message !== undefined && !!data.message.true_message === true && !currentConvoIds.includes(data.message.true_message.id)) {
-
-
-          let convos = this.state.currentUserConvos.map(convo => {
+          let convos = this.state.myConvos.map(convo => {
             if (convo.id === this.state.currentConvo.id) {
               convo.messages = [...convo.messages, data.message.true_message]
               return convo
@@ -148,16 +160,14 @@ class App extends Component {
           });
           if (Object.keys(this.state.currentConvo).length > 0) {
             let newConvo = { ...this.state.currentConvo }
-
-
             newConvo.messages = [...newConvo.messages, data.message.true_message]
             this.setState({
-              currentUserConvos: convos,
+              myConvos: convos,
               currentConvo: newConvo
             })
           } else {
             this.setState({
-              currentUserConvos: convos
+              myConvos: convos
             })
           }
         }
@@ -190,6 +200,8 @@ class App extends Component {
     }
     this.socket.send(JSON.stringify(msg))
   }
+
+
   handleNewConvoSubmit = async (e, selectedUser) => {
     console.log(selectedUser.target.value)
     // #write something that prevents
@@ -226,16 +238,16 @@ class App extends Component {
       <div className="App">
         <Header currentUser={this.state.currentUser} />
         <div className="main">
-          <reactRouterDom.Switch>
-            <reactRouterDom.Route exact path="/" component={Welcome} />
-            <reactRouterDom.Route
+          <Switch>
+            <Route exact path="/" component={Welcome} />
+            <Route
               exact
               path="/login"
               render={props => (
                 <Login {...props} updateCurrentUser={this.updateCurrentUser} />
               )}
             />
-            <reactRouterDom.Route
+            <Route
               exact
               path="/signup"
               render={props => (
@@ -243,11 +255,13 @@ class App extends Component {
               )}
             />
             {Object.keys(this.state.currentUser).length !== 0 ? (
-              <reactRouterDom.Route
+              <Route
                 exact
                 path="/inbox"
                 render={props => (
                   <Inbox {...props}
+                    myConvos={this.state.myConvos}
+                    getUserNameById={this.getUserNameById}
                     currentUser={this.state.currentUser}
                     currentConvo={this.state.currentConvo}
                     allUsers={this.state.allUsers}
@@ -258,13 +272,13 @@ class App extends Component {
                 )}
               />
             ) : (
-                <reactRouterDom.Redirect to="/login" />
+                <Redirect to="/login" />
               )}
-          </reactRouterDom.Switch>
+          </Switch>
         </div>
       </div>
     );
   }
 }
 
-export default reactRouterDom.withRouter(App);
+export default withRouter(App);

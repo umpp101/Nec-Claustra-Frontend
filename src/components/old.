@@ -1,0 +1,32 @@
+{/* 
+      // <div className="chat-container">
+
+      //   <div className="chat">
+      //     <div className="user-select-container">
+            <div className="form-group">
+              <label for="userSelector">Please select Who you'd like to chat with </label>
+              <select className="form-control" id="userSelector" */}
+                /* onClick={(e) => { this.props.handleNewConvo(e, e) }}>
+                {this.props.allUsers.map(user => { */}
+      {/* //         // this makes sure that i don't have an options of making a convo with myself(frontend Wise)
+      //            return user.id != this.props.currentUser.id && 
+      //           <option key={user.key} value={user.id}>{user.user_name.charAt(0).toUpperCase() + user.user_name.slice(1)}</option>})}
+      //           </select>
+          //   </div> */}
+          {/* </div> */}
+{/* 
+      //     <ul className="row message-container" id="channel-status" >{this.renderMessages()}</ul>
+      //     <div className="input-container">
+
+      //       <div className="row text-input-container">
+
+      //         <input type="text" className="text-input" id="input-field" placeholder="Enter your message..." */}
+      {/* //           value={this.state.currentChatMessage}
+      //           onChange={e => this.updateCurrentChatMessage(e)}
+      //           required="required"
+      //         />
+      //         <input className="input-button" type="submit" value="Send" onClick={event => this.props.handleSendEvent(this.state.currentChatMessage, event)} />
+      //       </div> */}
+      {/* //     </div> */}
+      {/* //   </div> */}
+      {/* // </div> */}

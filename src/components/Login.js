@@ -38,7 +38,7 @@ export default class Login extends Component {
       })
       .catch((error) => (console.log(error)))
       .then(() => {
-        this.props.history.push("/inbox");
+        this.props.history.push("/welcome");
       });
     }
 
