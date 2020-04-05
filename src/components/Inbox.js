@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-// import ConvoCard from "./ConvoCard";
 import Search from "./Search"
 import PeopleList from "./PeopleList"
 import CurrentChatHeader from './CurrentChatHeader'
@@ -17,17 +16,14 @@ export default class Inbox extends Component {
   }
 
   searchForUsers = (event) => {
-
-    console.log(event.target.value)
     this.setState({
       searchedTerm: event.target.value
     })
-    // console.log(event.target.value)
     let searchResult = event.target.value !== ''? this.props.allUsers.filter(user =>user.user_name.includes(event.target.value)) : [];
-    console.log(searchResult)
+    // console.log(searchResult)
     this.setState({
       searchedUsers: searchResult
-    }, () => console.log(this.state.searchedUsers));
+    });
   };
 
   componentDidMount() {
@@ -48,7 +44,6 @@ export default class Inbox extends Component {
           searchedTerm={this.state.searchedTerm}
           searchedUsers={this.state.searchedUsers}
           handleNewConvo={this.props.handleNewConvo}/>
-          
           {this.props.myConvos.map(convo =>
             <PeopleList
                 
@@ -58,11 +53,7 @@ export default class Inbox extends Component {
                 convo={convo} key={convo.id}
                 currentUser={this.props.currentUser} />)}
         </div>
-
-
-
         <div className="chat">
-          
         {Object.keys(this.props.currentConvo).length === 0 ? 
         <div className="chat-history">
           <h1> Please choose a user to chat with.. </h1>
@@ -85,8 +76,6 @@ export default class Inbox extends Component {
           }
         </div> 
       </div>
-
-
     );
   }
 }
