@@ -9,19 +9,18 @@ $gray: #92959E;
   box-sizing: border-box;
 }
 
-// body {
-//   background: #C5DDEB;
-//   font: 14px/20px "Lato", Arial, sans-serif;
-//   padding: 40px 0;
-//   color: white;
-// }
+body {
+  // background: #C5DDEB;
+  font: 14px/20px "Lato", Arial, sans-serif;
+  // padding: 40px 0;
+  color: white;
+}
 
 .container {
   margin: 0 auto;
   width: 750px;
-  background: black;
+  background: #444753;
   border-radius: 5px;
-  min-height: 50vh;
 }
 
 .people-list {
@@ -37,7 +36,7 @@ $gray: #92959E;
     border: none;
     padding: 14px;
     color: white;
-    background:white;
+    background: #6A6C75;
     width: 90%;
     font-size: 14px;
   }
@@ -56,7 +55,6 @@ $gray: #92959E;
     
     li {
       padding-bottom: 20px;
-      color: white
     }
   }
   
@@ -73,9 +71,7 @@ $gray: #92959E;
     padding-left: 8px;
   }
   
-  .status {
-    color: $gray;
-  }
+
   
 }
 
@@ -86,7 +82,7 @@ $gray: #92959E;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   
-  color: black;
+  color: #434651;
   
   .chat-header {
     padding: 20px;
@@ -124,8 +120,6 @@ $gray: #92959E;
     border-bottom: 2px solid white;
     overflow-y: scroll;
     height: 575px;
-    background-color: white;
-  }
     
     .message-data {
       margin-bottom: 15px;
@@ -212,20 +206,9 @@ $gray: #92959E;
       }
     }
   }
-
-
-.online, .offline, .me {
-    margin-right: 3px;
-    font-size: 10px;
-  }
-  
-.online {
-  color: $green;
 }
+
   
-.offline {
-  color: $orange;
-}
 
 .me {
   color: $blue;
@@ -249,7 +232,6 @@ $gray: #92959E;
 	font-size: 0;
 	content: " ";
 	clear: both;
-  height: 0;
-  color:white
+	height: 0;
 }
 

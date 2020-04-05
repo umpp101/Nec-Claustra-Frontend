@@ -98,9 +98,12 @@ class App extends Component {
     })
   }
   getUserNameById = (id) => {
+    console.log(id)
+  
     if (this.state.allUsers.length !== 0) {
       let user = this.state.allUsers.find(user => user.id === id)
-      return user.first_name.charAt(0).toUpperCase() + user.user_name.slice(1)
+      console.log(user)
+      return user.user_name.charAt(0).toUpperCase() + user.user_name.slice(1)
     }
   }
 
@@ -203,7 +206,8 @@ class App extends Component {
 
 
   handleNewConvoSubmit = async (e, selectedUser) => {
-    console.log(selectedUser.target.value)
+    console.log(selectedUser.id)
+    console.log(e)
     // #write something that prevents
     e.preventDefault();
     const fetchUrl = (`http://localhost:3000/users/${this.state.currentUser.id}/conversations`);
@@ -216,7 +220,7 @@ class App extends Component {
       body: JSON.stringify({
         conversation: {
           sender_id: this.state.currentUser.id,
-          receiver_id: selectedUser.target.value
+          receiver_id: selectedUser.id
         }
       })
     };
@@ -229,6 +233,7 @@ class App extends Component {
       currentConvo: postData.conversation
     })
     //   this.props.history.push('/homepage')
+    await this.fetchMyConvos()
   }
 
 
