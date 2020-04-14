@@ -14,7 +14,7 @@ export default class Login extends Component {
 
   handleLoginSubmit = (event) => {
     event.preventDefault();
-    fetch("http://localhost:3000/login", {
+    fetch("https://nec-claustra-backend.herokuapp.com/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

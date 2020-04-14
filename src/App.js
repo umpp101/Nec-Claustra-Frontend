@@ -37,7 +37,7 @@ class App extends Component {
     console.log('comp mounted');
     if (localStorage.getItem("token") !== null) {
 
-      fetch("http://localhost:3000/reAuth", {
+      fetch("https://nec-claustra-backend.herokuapp.com/reAuth", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -68,7 +68,7 @@ class App extends Component {
   };
 
   fetchMyConvos = async () => {
-    const response = await fetch(`http://localhost:3000/users/${this.state.currentUser.id}/conversations`)
+    const response = await fetch(`https://nec-claustra-backend.herokuapp.com/users/${this.state.currentUser.id}/conversations`)
     const apiData = await response.json()
     // console.log("i just called you")
     this.setState({
@@ -84,7 +84,7 @@ class App extends Component {
   }
 
   fetchUsers = async () => {
-    const response = await fetch("http://localhost:3000/users")
+    const response = await fetch("https://nec-claustra-backend.herokuapp.com/users")
     const apiData = await response.json();
     let users = apiData.data.map(el => el.attributes)
     // console.log( users)
@@ -222,7 +222,7 @@ class App extends Component {
 deleteConvo = async (e,convoToDelete) => {
   // this.socket.close()
   console.log(e.id)
-  const fetchUrl = (`http://localhost:3000/conversations/${e.id}`);
+  const fetchUrl = (`https://nec-claustra-backend.herokuapp.com/conversations/${e.id}`);
     const settings = {
       method: 'DELETE'
     };
@@ -240,7 +240,7 @@ deleteConvo = async (e,convoToDelete) => {
     this.socket.close()
     console.log(this.socket)
     e.preventDefault();
-    const fetchUrl = (`http://localhost:3000/users/${this.state.currentUser.id}/conversations`);
+    const fetchUrl = (`https://nec-claustra-backend.herokuapp.com/users/${this.state.currentUser.id}/conversations`);
     const settings = {
       method: "POST",
       headers: {
