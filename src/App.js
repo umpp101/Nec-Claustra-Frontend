@@ -104,7 +104,7 @@ class App extends Component {
   }
 
   openWsConnection = async () => {
-    this.socket = new WebSocket("ws://nec-claustra-backend.herokuapp.com/cable");
+    this.socket = new WebSocket("wss://nec-claustra-backend.herokuapp.com/cable");
     console.log("1 - Socket is open");
     this.socket.onopen = (e) => {
       // console.log(e);
