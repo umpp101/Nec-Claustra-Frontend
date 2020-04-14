@@ -61,10 +61,10 @@ class App extends Component {
 
   handleLogout = () => {
     localStorage.removeItem("token");
-    this.props.history.push("/");
     this.setState({
       currentUser: {}
     });
+    this.props.history.push("/");
   };
 
   fetchMyConvos = async () => {
@@ -147,14 +147,7 @@ class App extends Component {
 
 
         let currentConvoMsgIds = this.state.currentConvo.messages && this.state.currentConvo.messages.map(msg => (msg.id))
-        // let myConvoIds = this.state.myConvos.messages.map(msg => (msg.id))
-        // console.log("first condition:", data.message !== undefined)
-        // console.log("second condition:", !!data.message.true_message === true)
-        // // console.log(data)
-        // console.log("third condition:", !currentConvoIds.includes(data.message.true_message.id))
-        // console.log(currentConvoIds)
-        // console.log("MSG DATA", data.message.true_message)
-        // console.log("This current Convo Msg IDS: ",currentConvoMsgIds)
+
         if (data.message !== undefined && !!data.message.true_message === true && !currentConvoMsgIds.includes(data.message.true_message.id)) {
           console.log(this.state.myConvos)
           let convos = this.state.myConvos.map(convo => {
@@ -269,9 +262,7 @@ deleteConvo = async (e,convoToDelete) => {
     await this.setState({
       currentConvo: postData.conversation
     })
-    // console.log("added you in here")
-    //   this.props.history.push('/homepage')
-    // await this.socket.close()
+
     await this.fetchMyConvos()
     this.openWsConnection()
   }
