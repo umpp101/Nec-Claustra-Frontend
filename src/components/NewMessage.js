@@ -10,17 +10,21 @@ class NewMessage extends Component {
     }
 
 
-    handleChange = (e) => {
-        // console.log(e.target.value)
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-    }
+
 
     handleEnter = (event) => {
         if (event.key === "Enter") {
             this.props.handleSendEvent(this.state.currentChatMessage, event)
+            this.setState({
+                currentChatMessage: ''
+            })
         }
+    }
+    handleSendButton = (event) =>{
+        this.props.handleSendEvent(this.state.currentChatMessage, event);
+        this.setState({
+            currentChatMessage: ''
+        })
     }
     updateCurrentChatMessage = (event) => {
         //   console.log(event.target.value)
@@ -36,7 +40,7 @@ class NewMessage extends Component {
                     value={this.state.currentChatMessage}
                     onKeyDown={event => this.handleEnter(event)}
                     onChange={e => this.updateCurrentChatMessage(e)}></textarea>
-                <button onClick={event => this.props.handleSendEvent(this.state.currentChatMessage, event)}> Send</button>
+                <button onClick={event => this.handleSendButton(event)}> Send</button>
             </div>
 
         )
