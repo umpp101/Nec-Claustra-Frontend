@@ -174,6 +174,7 @@ class App extends Component {
             newConvo.messages = [...newConvo.messages, data.message.true_message]
 
             console.log("4) Grabbed our translated message"," ' ", data.message.true_message.content," ' ")
+            // console.log("4) Grabbed our translated message"," ' ", data.message.true_message.translated_content," ' ")
             console.log("5) Added it to our prev Messages", newConvo)
             this.setState({
               myConvos: convos,

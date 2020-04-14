@@ -37,7 +37,7 @@ export class Messages extends Component {
                             <span className="message-data-name" style={{textAlign : "right",  paddingRight: "6px"}}> Them </span>
                         </div>
                         <div className="message my-message">
-                            {msg.content}
+                            {msg.translated_content}
                         </div>
                         </>
                    )
