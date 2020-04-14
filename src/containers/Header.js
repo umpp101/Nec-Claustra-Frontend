@@ -29,7 +29,6 @@ class Header extends Component {
       
         <header className="App-header">
               <Link to='/'><img className="logo" src="actualLogo.png" alt="logo"/></Link>
-              <p><Link to='/'><img src="https://i.imgur.com/bW5PXpG.png" alt="home"/>Home</Link></p>
          {this.loginLogic()}
        </header>
     );
