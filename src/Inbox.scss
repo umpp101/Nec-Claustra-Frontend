@@ -10,20 +10,18 @@ $gray: #92959E;
 }
 
 body {
-  // background: #C5DDEB;
   font: 14px/20px "Lato", Arial, sans-serif;
-  // padding: 40px 0;
   color: white;
 }
 
 .container {
   margin: 0 auto;
   width: 750px;
-  background: #444753;
+  background: #52c8fa;
   border-radius: 5px;
 }
 
-.people-list {
+.user-list {
   width:260px;
   float: left;
   
@@ -35,10 +33,9 @@ body {
     border-radius: 3px;
     border: none;
     padding: 14px;
-    color: white;
-    background: #6A6C75;
+    color:#282c34;
     width: 90%;
-    font-size: 14px;
+    font-size: 16px;
   }
   
   .fa-search {
@@ -132,13 +129,12 @@ body {
     
     .message {      
       color: white;
-      padding: 18px 20px;
-      line-height: 26px;
-      font-size: 16px;
-      border-radius: 7px;
-      margin-bottom: 30px;
-      width: 90%;
-      position: relative;
+    padding: 18px 20px;
+    line-height: 26px;
+    font-size: 16px;
+    border-radius: 7px;
+    margin-bottom: 12px;
+    width: 90%;
       
       &:after {
         bottom: 100%;
@@ -183,13 +179,7 @@ body {
       resize: none;
       
     }
-    
-    .fa-file-o, .fa-file-image-o {
-      font-size: 16px;
-      color: gray;
-      cursor: pointer;
-      
-    }
+  
     
     button {
       float: right;

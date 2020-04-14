@@ -2,18 +2,16 @@ import React, { Component } from 'react'
 
 
 export class Search extends Component {
- 
-
 
     mySuggestions = () => {
         if (this.props.searchedUsers.length !== 0) {
             return this.props.searchedUsers.map(user => {
 
                 return (
-                    <div className="clearfix">
-                        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" className="about" />
+                    <div className="clearfix" onClick={(e) => {this.props.handleNewConvo(e,user); this.props.resetSearch(e,user)}}>
+                        <img src="ChatAvi.png" alt="avatar" className="about" />
                         <div className="about" >
-                            <div className="name" onClick={(e) => this.props.handleNewConvo(e,user)}>{user.user_name}</div>
+                            <div className="name">{user.user_name}</div>
                         </div>
                     </div>
                 )
@@ -30,7 +28,7 @@ export class Search extends Component {
 
             <div className="search">
                 <input type="text" placeholder="search"
-                    onChange={(event) => this.props.searchForUsers(event)} />
+                    value={this.props.searchedTerm} onChange={(event) => this.props.searchForUsers(event)} />
                 {this.mySuggestions()}
             </div>
         )

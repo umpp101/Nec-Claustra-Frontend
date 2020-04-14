@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Link } from 'react-router-dom';
 
 
 export default class Login extends Component {
@@ -38,7 +38,7 @@ export default class Login extends Component {
       })
       .catch((error) => (console.log(error)))
       .then(() => {
-        this.props.history.push("/welcome");
+        this.props.history.push("/Home");
       });
     }
 
@@ -54,23 +54,39 @@ export default class Login extends Component {
 
   render() {
     return (
-        <Form onSubmit={this.handleLoginSubmit}>
-                    <h1>Login</h1>
-        <Form.Group controlId="formBasicEmail">
-          <Form.Control type='text' name="user_name" placeholder="Username" onChange={(e) => this.handleChange (e)} value={this.state.user_name}/>
-        
-        </Form.Group>
+      <div >
+      <div>
+          <div >
+              <h1>Login</h1>
+              <form onSubmit={this.handleLoginSubmit}>
+                  <div>
+                      <div><br/>
+                          <label style={{color: "#52c8fa", fontSize: "18px"}} >Username</label><br/><br/>
+                          <input
+                              style={{fontSize: "13px", textAlign: "center"}}
+                              name="user_name" onChange={e => this.handleChange(e)} value={this.state.user_name}
+                              type="text"  placeholder="Your Username" />
+                      </div><br/><br/>
+                      <div >
+                          <label style={{color: "#52c8fa", fontSize: "18px"}}>Password</label><br/><br/>
+                          <input
+                              style={{fontSize: "13px", textAlign: "center"}}
+                              name="password" onChange={e => this.handleChange(e)} value={this.state.password}
+                              type="password"  placeholder="●●●●●●●●●" />
+                      </div>
+                  </div><br/>
+                  <div>
+                      <button type="submit" style={{fontWeight: "700",fontSize: "20px"}} >Login</button>
+                      <div><br/>
+                          <p style={{fontSize: "16px"}} >Don't Have An Account?</p>
+                          <Link to="/signup" style={{color: "#52c8fa", fontSize: "20px"}}>Sign up</Link>
+                      </div>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
 
-        <br></br>
-      
-        <Form.Group controlId="formBasicPassword">
-          <Form.Control type='password' name="password" placeholder="Password" onChange={(e) => this.handleChange(e)} value={this.state.password}/>
-        </Form.Group>
-        <br></br>
-        <Button variant="primary-submit" type="submit">
-          Submit
-        </Button>
-      </Form>
     );
   }
 }

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import './Inbox.scss'
-import Welcome from "./components/Welcome";
+import Home from "./components/Home";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Header from "./containers/Header";
@@ -24,9 +24,7 @@ class App extends Component {
 
   
   updateCurrentUser = ({ currentUser }) => this.setState({ currentUser })
-  // when currentUser changes, fetch
-  // this.fetchUsers();
-  // this.fetchMyConvos();
+
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.currentUser?.id !== prevState.currentUser?.id) {
@@ -49,7 +47,7 @@ class App extends Component {
       })
         .then(res => res.json())
         .then((data) => {
-          console.log(data);
+          console.log("User logged in now: ", data);
           this.setState({
             currentUser: {
               id: Number(data.user.data.id),
@@ -58,8 +56,6 @@ class App extends Component {
           })
         })
         .catch((error) => (console.log(error)))
-      // .then(() => this.fetchMyConvos())
-
     }
   }
 
@@ -74,7 +70,7 @@ class App extends Component {
   fetchMyConvos = async () => {
     const response = await fetch(`http://localhost:3000/users/${this.state.currentUser.id}/conversations`)
     const apiData = await response.json()
-    console.log(apiData)
+    // console.log("i just called you")
     this.setState({
       myConvos: apiData.conversations
     })
@@ -109,26 +105,28 @@ class App extends Component {
 
   openWsConnection = async () => {
     this.socket = new WebSocket("ws://localhost:3000/cable");
-
+    console.log("1 - Socket is open");
     this.socket.onopen = (e) => {
       // console.log(e);
-      console.log("Starting to send to server");
+      console.log("2 - Starting to send a subscription to server");
       let msg = {
         command: 'subscribe',
         identifier: JSON.stringify({
           channel: "ChatChannel"
         })
-        // identifier: 'ChatChannel'
       }
       this.socket.send(JSON.stringify(msg))
-
     }
 
     this.socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      // console.log(data)
+      
+      let data = JSON.parse(event.data);
+
+      (data.message && !!data.message.true_message ? console.log("We recieved the msg: ", data.message.true_message) : console.log("Still waiting on a message!"))
+
       // check to see if our typed message id exists in our "my convos" or currentConvo.messages before we set state
-      if (data.type == "confirm_subscription") {
+      if (data.type === "confirm_subscription") {
+        console.log("3 - Subscription was confirmed! ");
         const message = {
           command: 'message',
           identifier: JSON.stringify({
@@ -143,35 +141,49 @@ class App extends Component {
           })
         }
         this.socket.send(JSON.stringify(message))
-      } else if (this.state.currentConvo.messages) {
+        console.log(message)
+      } else if (Object.keys(this.state.currentConvo).length > 0) {
+        console.log("We do have currentConvo")
 
 
-        let currentConvoIds = this.state.currentConvo.messages && this.state.currentConvo.messages.map(msg => (msg.id))
+        let currentConvoMsgIds = this.state.currentConvo.messages && this.state.currentConvo.messages.map(msg => (msg.id))
         // let myConvoIds = this.state.myConvos.messages.map(msg => (msg.id))
         // console.log("first condition:", data.message !== undefined)
         // console.log("second condition:", !!data.message.true_message === true)
-        // console.log(data)
+        // // console.log(data)
         // console.log("third condition:", !currentConvoIds.includes(data.message.true_message.id))
-        if (data.message !== undefined && !!data.message.true_message === true && !currentConvoIds.includes(data.message.true_message.id)) {
+        // console.log(currentConvoIds)
+        // console.log("MSG DATA", data.message.true_message)
+        // console.log("This current Convo Msg IDS: ",currentConvoMsgIds)
+        if (data.message !== undefined && !!data.message.true_message === true && !currentConvoMsgIds.includes(data.message.true_message.id)) {
+          console.log(this.state.myConvos)
           let convos = this.state.myConvos.map(convo => {
             if (convo.id === this.state.currentConvo.id) {
               convo.messages = [...convo.messages, data.message.true_message]
+              console.log("3) new msg was added ")
               return convo
             } else {
+              // console.log("new msg was NOT added ")
               return convo
             }
           });
           if (Object.keys(this.state.currentConvo).length > 0) {
+         console.log("3) Grabbed our CURRENT CONVO", this.state.currentConvo)
+
             let newConvo = { ...this.state.currentConvo }
             newConvo.messages = [...newConvo.messages, data.message.true_message]
+
+            console.log("4) Grabbed our translated message"," ' ", data.message.true_message.content," ' ")
+            console.log("5) Added it to our prev Messages", newConvo)
             this.setState({
               myConvos: convos,
               currentConvo: newConvo
-            })
+            }, ()=> console.log("6) We successfully updated CURRENTCONVO state"))
+
           } else {
             this.setState({
               myConvos: convos
-            })
+            },()=> console.log("6) We didn't update CURRENTCONVO state"))
           }
         }
       };
@@ -181,10 +193,14 @@ class App extends Component {
       console.log(`[error] ${error.message}`);
     };
   }
-  handleSendEvent = (message, event) => {
+
+
+
+
+  handleSendEvent = async (message, event) => {
+    // await this.openWsConnection()
     event.preventDefault()
-    // console.log(this.state)
-    console.log(this.socket)
+    console.log("1) You sent the message "," ' ", message," ' "," by clicking send")
     const msg = {
       command: 'message',
       identifier: JSON.stringify({
@@ -201,14 +217,34 @@ class App extends Component {
         }
       })
     }
-    this.socket.send(JSON.stringify(msg))
+    await this.socket.send(JSON.stringify(msg))
+    console.log("2)", " ' ", message," ' ", "was sent to be translated")
+    console.log(this.socket)
+    this.props.history.push('/inbox')
+    this.fetchMyConvos()
+    // () => console.log("Msg was sent to be translated")
   }
 
-
+deleteConvo = async (e,convoToDelete) => {
+  // this.socket.close()
+  console.log(e.id)
+  const fetchUrl = (`http://localhost:3000/conversations/${e.id}`);
+    const settings = {
+      method: 'DELETE'
+    };
+    const response = await fetch(fetchUrl, settings);
+    const postData = await response.json();
+    console.log(postData)
+    if (!!postData.error === true) return null
+    this.setState({
+      currentConvo: {}
+    },()=> console.log("Wiped Current Convo"))
+    await this.fetchMyConvos()
+    this.openWsConnection()
+}
   handleNewConvoSubmit = async (e, selectedUser) => {
-    console.log(selectedUser.id)
-    console.log(e)
-    // #write something that prevents
+    this.socket.close()
+    console.log(this.socket)
     e.preventDefault();
     const fetchUrl = (`http://localhost:3000/users/${this.state.currentUser.id}/conversations`);
     const settings = {
@@ -232,8 +268,11 @@ class App extends Component {
     await this.setState({
       currentConvo: postData.conversation
     })
+    // console.log("added you in here")
     //   this.props.history.push('/homepage')
+    // await this.socket.close()
     await this.fetchMyConvos()
+    this.openWsConnection()
   }
 
 
@@ -241,10 +280,12 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Header currentUser={this.state.currentUser} />
+        <Header 
+        handleLogout={this.handleLogout}
+        currentUser={this.state.currentUser} />
         <div className="main">
           <Switch>
-            <Route exact path="/" component={Welcome} />
+            <Route exact path="/" component={Home} />
             <Route
               exact
               path="/login"
@@ -273,7 +314,8 @@ class App extends Component {
                     openWsConnection={this.openWsConnection}
                     handleSendEvent={this.handleSendEvent}
                     handleNewConvo={this.handleNewConvoSubmit}
-                    setConvo={this.setConvo} />
+                    setConvo={this.setConvo} 
+                    deleteConvo={this.deleteConvo}/>
                 )}
               />
             ) : (
