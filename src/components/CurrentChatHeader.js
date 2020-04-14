@@ -18,10 +18,10 @@ export class CurrentChatHeader extends Component {
     console.log(this.props)
     return (
       <div className="chat-header clearfix">
-      <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="avatar" />
+      <img src="ChatAvi.png" alt="avatar" />
       <div className="chat-about">
         <div className="chat-with">{this.getOtherUserName()}</div>
-        <div className="chat-num-messages">put the length of the messages here</div>
+        <div className="chat-num-messages"></div>
       </div>
     </div>
     )
