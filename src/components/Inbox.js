@@ -58,7 +58,7 @@ export default class Inbox extends Component {
           setConvo={this.props.setConvo}/>
 
 
-          { (this.props.myConvos).length !== 0  ?  
+          { this.props.myConvos.length !== 0  ?  
 
           this.props.myConvos.map(convo =>
             <UserList

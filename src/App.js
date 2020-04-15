@@ -17,7 +17,7 @@ class App extends Component {
       currentUser: {},
       currentConvo: {},
       allUsers: [],
-      myConvos: {}
+      myConvos: []
     }
     this.socket = undefined;
   }
@@ -64,6 +64,7 @@ class App extends Component {
     this.setState({
       currentUser: {}
     });
+    this.socket.close()
     this.props.history.push("/");
   };
 

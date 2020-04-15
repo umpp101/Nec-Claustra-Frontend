@@ -26,6 +26,8 @@ export default class Login extends Component {
     })
       .then(resp => resp.json())
       .then(data => {
+        if (!!data.error === true  )
+        console.log(data);
         localStorage.setItem("token", data.jwt);
         
         const currentUser = {
@@ -77,13 +79,19 @@ export default class Login extends Component {
                   </div><br/>
                   <div>
                       <button type="submit" style={{fontWeight: "700",fontSize: "20px"}} >Login</button>
-                      <div><br/>
+                      <div>
+                        
+                       
+                        <br/>
                           <p style={{fontSize: "16px"}} >Don't Have An Account?</p>
                           <Link to="/signup" style={{color: "#52c8fa", fontSize: "20px"}}>Sign up</Link>
                       </div>
+
                   </div>
+
               </form>
           </div>
+              <br/> <h3 style={{color: "red"}}> Invalid Username or Password</h3>
       </div>
   </div>
 
