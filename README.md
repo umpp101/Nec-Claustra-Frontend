@@ -12,7 +12,8 @@
 - [Backend](#Backend)
 
 ## About
-`Nec Claustra, Multilingual Chat Web App`
+`Nec Claustra: No Barriers in latin.
+ Multilingual Chat Web App`
 
 Nec-Claustra, is a React and Rails web app that was designed and engineered to unlocking language barriers via instant messaging to bring people together..utilizing Google Translate Api.
 
@@ -37,4 +38,4 @@ Set up a rails RESTful API with PostgreSQL to store data. JWT tokens, Bcrypt for
 - https://wwww.nec-claustra.herokuapp.com
 
 ## Backend
-- https://github.com/umpp101/Nec-Claustra-Frontend
+- https://github.com/umpp101/Nec-Claustra-Backend
