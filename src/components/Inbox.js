@@ -74,7 +74,7 @@ export default class Inbox extends Component {
         <div className="chat">
         {Object.keys(this.props.currentConvo).length === 0 ? 
         <div className="chat-history">
-          <h1> Please search for a user to chat with.. </h1>
+          <h1> Please select a user to chat with.. </h1>
         </div> :
           <>
           <CurrentChatHeader

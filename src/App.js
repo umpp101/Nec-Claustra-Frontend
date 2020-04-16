@@ -31,7 +31,7 @@ class App extends Component {
 
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.currentUser?.id !== prevState.currentUser?.id && undefined) {
+    if (this.state.currentUser?.id !== prevState.currentUser?.id) {
       this.fetchUsers();
       this.fetchMyConvos();
     }
@@ -64,7 +64,6 @@ class App extends Component {
 
   handleLogout = () => {
     localStorage.removeItem("token");
-    this.socket.close()
     this.setState({
       currentUser: {}
     });
