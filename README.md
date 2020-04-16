@@ -21,7 +21,7 @@ I initially created this app, implementing IBM Watson's translate API and then l
 
 Set up a rails RESTful API with PostgreSQL to store data. JWT tokens, Bcrypt for Login/ReAuth.
 
-<a href="https://github.com/umpp101/Nec-Claustra-Frontend"><img src="https://github.com/umpp101/Nec-Claustra-Frontend/blob/master/public/nec-claustra-gif-1.gif" alt="NecClaustra" width="300px"></a>
+<a href="https://github.com/umpp101/Nec-Claustra-Frontend"><img src="https://github.com/umpp101/Nec-Claustra-Frontend/blob/master/public/nec-claustra-gif-1.gif" alt="NecClaustra" width="700px"></a>
 ## Features
 - Detecting user languages ✅
 - Generating messages that are translated ✅
