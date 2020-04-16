@@ -34,7 +34,7 @@ Set up a rails RESTful API with PostgreSQL to store data. JWT tokens, Bcrypt for
 - Use `npm start` command to run the application
 
 ## LiveSite
-- https://www.
+- https://wwww.nec-claustra.herokuapp.com
 
 ## Backend
 - https://github.com/umpp101/Nec-Claustra-Frontend

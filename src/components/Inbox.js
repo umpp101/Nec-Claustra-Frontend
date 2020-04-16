@@ -8,7 +8,6 @@ import NewMessage from './NewMessage'
 export default class Inbox extends Component {
   constructor(props) {
     super(props)
-  
     this.state = {
        searchedUsers: [],
        searchedTerm: ''
@@ -24,6 +23,7 @@ export default class Inbox extends Component {
       searchedUsers: []
     })
   }
+
   searchForUsers = (event) => {
     // console.log(event)
     this.setState({
@@ -43,7 +43,6 @@ export default class Inbox extends Component {
   }
 
   render() {
-    // console.log(this.props)
     return (
       <div className="container clearfix">
         <div className="user-list" id="user-list">
@@ -57,12 +56,10 @@ export default class Inbox extends Component {
           myConvos={this.props.myConvos}
           setConvo={this.props.setConvo}/>
 
-
           { this.props.myConvos.length !== 0  ?  
 
           this.props.myConvos.map(convo =>
             <UserList
-                
                 getUserNameById={this.props.getUserNameById}
                 setConvo={this.props.setConvo}
                 allUsers={this.props.allUsers}
@@ -77,9 +74,8 @@ export default class Inbox extends Component {
         <div className="chat">
         {Object.keys(this.props.currentConvo).length === 0 ? 
         <div className="chat-history">
-          <h1> Please choose a user to chat with.. </h1>
-        </div>
-          :
+          <h1> Please search for a user to chat with.. </h1>
+        </div> :
           <>
           <CurrentChatHeader
             getUserNameById={this.props.getUserNameById}

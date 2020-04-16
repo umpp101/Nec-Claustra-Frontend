@@ -4,19 +4,22 @@
 }
 
 
-.css-typing p {
+.css-typing h2 {
   width: 100%;
+  margin-block-start: 0em;
+    margin-block-end: 3em;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
   margin-top: 50px;
-  border-right: .15em solid orange;
+  border-right: .28em solid orange;
   font-family: "Montserrat";
-  font-size: 18px;
+  font-size: 26px;
   white-space: nowrap;
   overflow: hidden;
+  color: #61dafb
 }
-.css-typing p:nth-child(1) {
+.css-typing h2:nth-child(1) {
   width: 13em;
   -webkit-animation: type 5s steps(40, end);
   animation: type 6s steps(40, end);
@@ -24,7 +27,7 @@
   animation-fill-mode: forwards;
 }
 
-.css-typing p:nth-child(2) {
+.css-typing h2:nth-child(2) {
   width: 35em;
   opacity: 0;
   -webkit-animation: type2 2s steps(40, end);
@@ -35,7 +38,7 @@
   animation-fill-mode: forwards;
 }
 
-.css-typing p:nth-child(3) {
+.css-typing h2:nth-child(3) {
   width: 42em;
   opacity: 0;
   -webkit-animation: type3 5s steps(20, end), blink .5s step-end infinite alternate;
@@ -45,7 +48,7 @@
   -webkit-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
 }
-.css-typing p:nth-child(4) {
+.css-typing h2:nth-child(4) {
   width: 55em;
   opacity: 0;
   -webkit-animation: type2 2s steps(20, end);
@@ -55,7 +58,7 @@
   -webkit-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
 }
-.css-typing p:nth-child(5) {
+.css-typing h2:nth-child(5) {
   width: 15em;
   opacity: 0;
   -webkit-animation: type2 2s steps(20, end);

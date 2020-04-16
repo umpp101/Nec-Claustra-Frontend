@@ -8,13 +8,14 @@ export default class Login extends Component {
 
     this.state = {
       user_name: "",
-      password: ""
+      password: "",
+      error: ""
     };
   }
 
   handleLoginSubmit = (event) => {
     event.preventDefault();
-    fetch("https://nec-claustra-backend.herokuapp.com/login", {
+    fetch("http://localhost:3000/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -26,10 +27,13 @@ export default class Login extends Component {
     })
       .then(resp => resp.json())
       .then(data => {
-        if (!!data.error === true  )
-        console.log(data);
+        if (!!data.error === true) {
+          this.setState({
+            error: data.error
+          })
+        }
+        else {
         localStorage.setItem("token", data.jwt);
-        
         const currentUser = {
           id: data.user.data.attributes.id,
           user_name: data.user.data.attributes.user_name,
@@ -37,11 +41,8 @@ export default class Login extends Component {
           nationality: data.user.data.attributes.nationality
         };
         this.props.updateCurrentUser({ currentUser })
-      })
-      .catch((error) => (console.log(error)))
-      .then(() => {
-        this.props.history.push("/Home");
-      });
+      }
+    })
     }
 
  
@@ -91,7 +92,7 @@ export default class Login extends Component {
 
               </form>
           </div>
-              <br/> <h3 style={{color: "red"}}> Invalid Username or Password</h3>
+          {(this.state.error !== "") ? <h3 style={{color: "red"}}> {this.state.error} </h3> : null}
       </div>
   </div>
 

@@ -16,15 +16,13 @@ export class UserList extends Component {
     }
 
     render() {
-        // console.log(this.props.convo);
-
         return (
             <div className="clearfix" >
                 <img src="ChatAvi.png" alt="avatar" className="about" onClick={() => this.props.setConvo(this.props.convo)} />
                 <div className="about" >
-                    <div className="name" onClick={() => this.props.setConvo(this.props.convo)} style={{marginTop: "inherit"}}>{this.getOtherUserName()}</div>
+                    <div className="name" onClick={() => this.props.setConvo(this.props.convo)} style={{ marginTop: "inherit" }}>{this.getOtherUserName()}</div>
                 </div>
-                    <span style={{marginLeft: "60%"}} onClick={() => this.props.deleteConvo(this.props.convo)}> X </span>
+                <span style={{ marginLeft: "60%" }} onClick={() => this.props.deleteConvo(this.props.convo)}> X </span>
             </div>
         )
     }
