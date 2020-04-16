@@ -5,21 +5,21 @@ export class Home extends Component {
   render() {
     return (
       <div class="css-typing">
-        <p>
+        <h2>
           Welcome to Nec Claustra!
-  </p>
-        <p>
+  </h2>
+        <h2>
           Ever wanted to have a chat with someone that spoke another language?
-  </p>
-        <p>
+  </h2>
+        <h2>
           Only to realize it would be a hassle going back and forth translating their words?
-  </p>
-        <p>
+  </h2>
+        <h2>
           I've been there before! and here is a simple work around to help solve that problem...
-  </p>
-        <p>
+  </h2>
+        <h2>
           Chat with no language barriers!
-  </p>
+  </h2>
       </div>
     )
   }

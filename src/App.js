@@ -15,7 +15,7 @@ class App extends Component {
 
     this.state = {
       currentUser: {},
-      currentConvo: {},
+      currentConvo: [],
       allUsers: [],
       myConvos: []
     }
@@ -23,11 +23,15 @@ class App extends Component {
   }
 
   
-  updateCurrentUser = ({ currentUser }) => this.setState({ currentUser })
+  updateCurrentUser = ({ currentUser }) => {
+    
+    this.setState({ currentUser })
+    this.props.history.push("/inbox");
+  }
 
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.currentUser?.id !== prevState.currentUser?.id) {
+    if (this.state.currentUser?.id !== prevState.currentUser?.id && undefined) {
       this.fetchUsers();
       this.fetchMyConvos();
     }
@@ -37,7 +41,7 @@ class App extends Component {
     console.log('comp mounted');
     if (localStorage.getItem("token") !== null) {
 
-      fetch("https://nec-claustra-backend.herokuapp.com/reAuth", {
+      fetch("http://localhost:3000/reAuth", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -55,23 +59,21 @@ class App extends Component {
             }
           })
         })
-        .catch((error) => (console.log(error)))
     }
   }
 
   handleLogout = () => {
     localStorage.removeItem("token");
+    this.socket.close()
     this.setState({
       currentUser: {}
     });
-    this.socket.close()
     this.props.history.push("/");
   };
 
   fetchMyConvos = async () => {
-    const response = await fetch(`https://nec-claustra-backend.herokuapp.com/users/${this.state.currentUser.id}/conversations`)
+    const response = await fetch(`http://localhost:3000/users/${this.state.currentUser.id}/conversations`)
     const apiData = await response.json()
-    // console.log("i just called you")
     this.setState({
       myConvos: apiData.conversations
     })
@@ -85,18 +87,15 @@ class App extends Component {
   }
 
   fetchUsers = async () => {
-    const response = await fetch("https://nec-claustra-backend.herokuapp.com/users")
+    const response = await fetch("http://localhost:3000/users")
     const apiData = await response.json();
     let users = apiData.data.map(el => el.attributes)
-    // console.log( users)
     this.setState({
       allUsers: users,
       loading: false
     })
   }
   getUserNameById = (id) => {
-    console.log(id)
-  
     if (this.state.allUsers.length !== 0) {
       let user = this.state.allUsers.find(user => user.id === id)
       console.log(user)
@@ -105,11 +104,10 @@ class App extends Component {
   }
 
   openWsConnection = async () => {
-    this.socket = new WebSocket("wss://nec-claustra-backend.herokuapp.com/cable");
-    console.log("1 - Socket is open");
+    this.socket = new WebSocket("ws://localhost:3000/cable");
+    // console.log("1 - Socket is open");
     this.socket.onopen = (e) => {
-      // console.log(e);
-      console.log("2 - Starting to send a subscription to server");
+      // console.log("2 - Starting to send a subscription to server");
       let msg = {
         command: 'subscribe',
         identifier: JSON.stringify({
@@ -120,11 +118,8 @@ class App extends Component {
     }
 
     this.socket.onmessage = (event) => {
-      
       let data = JSON.parse(event.data);
-
       (data.message && !!data.message.true_message ? console.log("We recieved the msg: ", data.message.true_message) : console.log("Still waiting on a message!"))
-
       // check to see if our typed message id exists in our "my convos" or currentConvo.messages before we set state
       if (data.type === "confirm_subscription") {
         console.log("3 - Subscription was confirmed! ");
@@ -145,10 +140,7 @@ class App extends Component {
         console.log(message)
       } else if (Object.keys(this.state.currentConvo).length > 0) {
         console.log("We do have currentConvo")
-
-
         let currentConvoMsgIds = this.state.currentConvo.messages && this.state.currentConvo.messages.map(msg => (msg.id))
-
         if (data.message !== undefined && !!data.message.true_message === true && !currentConvoMsgIds.includes(data.message.true_message.id)) {
           console.log(this.state.myConvos)
           let convos = this.state.myConvos.map(convo => {
@@ -157,7 +149,6 @@ class App extends Component {
               console.log("3) new msg was added ")
               return convo
             } else {
-              // console.log("new msg was NOT added ")
               return convo
             }
           });
@@ -166,15 +157,13 @@ class App extends Component {
 
             let newConvo = { ...this.state.currentConvo }
             newConvo.messages = [...newConvo.messages, data.message.true_message]
-
-            console.log("4) Grabbed our translated message"," ' ", data.message.true_message.content," ' ")
+            // console.log("4) Grabbed our translated message"," ' ", data.message.true_message.content," ' ")
             // console.log("4) Grabbed our translated message"," ' ", data.message.true_message.translated_content," ' ")
-            console.log("5) Added it to our prev Messages", newConvo)
+            // console.log("5) Added it to our prev Messages", newConvo)
             this.setState({
               myConvos: convos,
               currentConvo: newConvo
             }, ()=> console.log("6) We successfully updated CURRENTCONVO state"))
-
           } else {
             this.setState({
               myConvos: convos
@@ -184,26 +173,20 @@ class App extends Component {
       };
 
     }
-    this.socket.onerror = (error) => {
-      console.log(`[error] ${error.message}`);
-    };
   }
 
 
 
 
   handleSendEvent = async (message, event) => {
-    // await this.openWsConnection()
     event.preventDefault()
-    console.log("1) You sent the message "," ' ", message," ' "," by clicking send")
+    // console.log("1) You sent the message "," ' ", message," ' "," by clicking send")
     const msg = {
       command: 'message',
       identifier: JSON.stringify({
         channel: "ChatChannel"
       }),
-      // identifier: 'ChatChannel',
       data: JSON.stringify({
-        // #this goes to the SPEAK Method in ChatChannel
         action: 'speak',
         message: {
           content: message,
@@ -213,17 +196,16 @@ class App extends Component {
       })
     }
     await this.socket.send(JSON.stringify(msg))
-    console.log("2)", " ' ", message," ' ", "was sent to be translated")
-    console.log(this.socket)
+    // console.log("2)", " ' ", message," ' ", "was sent to be translated")
+    // console.log(this.socket)
     this.props.history.push('/inbox')
     this.fetchMyConvos()
-    // () => console.log("Msg was sent to be translated")
   }
 
 deleteConvo = async (e,convoToDelete) => {
-  // this.socket.close()
-  console.log(e.id)
-  const fetchUrl = (`https://nec-claustra-backend.herokuapp.com/conversations/${e.id}`);
+
+  // console.log(e.id)
+  const fetchUrl = (`http://localhost:3000/conversations/${e.id}`);
     const settings = {
       method: 'DELETE'
     };
@@ -241,7 +223,7 @@ deleteConvo = async (e,convoToDelete) => {
     this.socket.close()
     console.log(this.socket)
     e.preventDefault();
-    const fetchUrl = (`https://nec-claustra-backend.herokuapp.com/users/${this.state.currentUser.id}/conversations`);
+    const fetchUrl = (`http://localhost:3000/users/${this.state.currentUser.id}/conversations`);
     const settings = {
       method: "POST",
       headers: {
@@ -299,10 +281,10 @@ deleteConvo = async (e,convoToDelete) => {
                 path="/inbox"
                 render={props => (
                   <Inbox {...props}
+                    currentConvo={this.state.currentConvo}
+                    currentUser={this.state.currentUser}
                     myConvos={this.state.myConvos}
                     getUserNameById={this.getUserNameById}
-                    currentUser={this.state.currentUser}
-                    currentConvo={this.state.currentConvo}
                     allUsers={this.state.allUsers}
                     openWsConnection={this.openWsConnection}
                     handleSendEvent={this.handleSendEvent}
