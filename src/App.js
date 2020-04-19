@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import './Inbox.scss'
 import { fetchUsers, reAuth } from "./api/userFetches"
-import { fetchMyConvos } from "./api/convoFetches"
+import { fetchMyConvos, deleteConvo, newConvo } from "./api/convoFetches"
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
@@ -32,6 +32,11 @@ class App extends Component {
 
 
   async componentDidUpdate(prevProps, prevState) {
+    if (this.state.myConvos.length !== prevState.myConvos.length){
+      console.log("started")
+      const fetchedMyConvos = await fetchMyConvos(this.state.currentUser)
+      this.setState({myConvos: fetchedMyConvos})
+    }
     if (this.state.currentUser?.id !== prevState.currentUser?.id) {
       const fetchedUsers = await fetchUsers()
       this.setState({allUsers: fetchedUsers})
@@ -161,57 +166,19 @@ class App extends Component {
       })
     }
     await this.socket.send(JSON.stringify(msg))
-    // console.log("2)", " ' ", message," ' ", "was sent to be translated")
-    // console.log(this.socket)
-    this.props.history.push('/inbox')
-    this.fetchMyConvos()
+    // this.props.history.push('/inbox')
   }
 
-deleteConvo = async (e,convoToDelete) => {
-
-  // console.log(e.id)
-  const fetchUrl = (`http://localhost:3000/conversations/${e.id}`);
-    const settings = {
-      method: 'DELETE'
-    };
-    const response = await fetch(fetchUrl, settings);
-    const postData = await response.json();
-    console.log(postData)
-    if (!!postData.error === true) return null
-    this.setState({
-      currentConvo: {}
-    },()=> console.log("Wiped Current Convo"))
-    await this.fetchMyConvos()
-    this.openWsConnection()
+deleteConvo = async (convo) => {
+  deleteConvo(convo)
+  this.setState({currentConvo: {}}); 
 }
-  handleNewConvoSubmit = async (e, selectedUser) => {
+handleNewConvoSubmit = async (receiver) => {
+    // e.preventDefault();
+    const newlyMadeConvo= await newConvo(receiver, this.state.currentUser)
+    this.setState({currentConvo: newlyMadeConvo});
     this.socket.close()
     console.log(this.socket)
-    e.preventDefault();
-    const fetchUrl = (`http://localhost:3000/users/${this.state.currentUser.id}/conversations`);
-    const settings = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json"
-      },
-      body: JSON.stringify({
-        conversation: {
-          sender_id: this.state.currentUser.id,
-          receiver_id: selectedUser.id
-        }
-      })
-    };
-    const response = await fetch(fetchUrl, settings);
-    const postData = await response.json();
-    console.log(postData)
-    if (!!postData.error === true) return null
-    // console.log(postData.error)
-    await this.setState({
-      currentConvo: postData.conversation
-    })
-
-    await this.fetchMyConvos()
     this.openWsConnection()
   }
 
