@@ -3,11 +3,9 @@ import "./App.css";
 import './Inbox.scss'
 import { fetchUsers, reAuth } from "./api/userFetches"
 import { fetchMyConvos, deleteConvo, newConvo } from "./api/convoFetches"
-import Home from "./components/Home";
-import Login from "./components/Login";
-import Signup from "./components/Signup";
-import Header from "./containers/Header";
-import Inbox from "./components/Inbox";
+import { Home, Header, Login, Signup, Inbox} from "./components/index.js";
+
+
 
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 
@@ -87,6 +85,7 @@ class App extends Component {
   }
 
   openWsConnection = async () => {
+
     this.socket = new WebSocket("ws://localhost:3000/cable");
     // console.log("1 - Socket is open");
     this.socket.onopen = (e) => {
