@@ -30,7 +30,7 @@ class App extends Component {
     this.props.history.push("/inbox");
   }
 
-
+  
   async componentDidUpdate(prevProps, prevState) {
     if (this.state.myConvos.length !== prevState.myConvos.length){
       console.log("started")
@@ -44,7 +44,7 @@ class App extends Component {
       this.setState({myConvos: fetchedMyConvos})
     }
   }
-
+  
   async componentDidMount() {
     console.log('comp mounted');
     if (localStorage.getItem("token") !== null) {
@@ -52,18 +52,31 @@ class App extends Component {
       this.setState({currentUser: checkedUser})
     }
   }
+  
+  handleNewConvoSubmit = async (receiver) => {
+    // e.preventDefault();
+    const newlyMadeConvo = await newConvo(receiver, this.state.currentUser)
+    this.setState({ currentConvo: newlyMadeConvo });
+    this.socket.close()
+    console.log(this.socket)
+    this.openWsConnection()
+  }
 
+  deleteConvo = async (convo) => {
+    deleteConvo(convo)
+    this.setState({ currentConvo: {} });
+  }
   handleLogout = () => {
     localStorage.removeItem("token");
     this.setState({currentUser: {}});
     this.props.history.push("/");
   };
-
-
-
+  
   setConvo = (obj) => {
     this.setState({currentConvo: obj})
   }
+
+
 
   getUserNameById = (id) => {
     if (this.state.allUsers.length !== 0) {
@@ -169,27 +182,14 @@ class App extends Component {
     // this.props.history.push('/inbox')
   }
 
-deleteConvo = async (convo) => {
-  deleteConvo(convo)
-  this.setState({currentConvo: {}}); 
-}
-handleNewConvoSubmit = async (receiver) => {
-    // e.preventDefault();
-    const newlyMadeConvo= await newConvo(receiver, this.state.currentUser)
-    this.setState({currentConvo: newlyMadeConvo});
-    this.socket.close()
-    console.log(this.socket)
-    this.openWsConnection()
-  }
-
 
   render() {
-
+    const { currentUser, currentConvo, allUsers, myConvos} = this.state;
     return (
       <div className="App">
         <Header 
         handleLogout={this.handleLogout}
-        currentUser={this.state.currentUser} />
+        currentUser={currentUser} />
         <div className="main">
           <Switch>
             <Route exact path="/" component={Home} />
@@ -213,11 +213,11 @@ handleNewConvoSubmit = async (receiver) => {
                 path="/inbox"
                 render={props => (
                   <Inbox {...props}
-                    currentConvo={this.state.currentConvo}
-                    currentUser={this.state.currentUser}
-                    myConvos={this.state.myConvos}
+                    currentConvo={currentConvo}
+                    currentUser={currentUser} 
+                    myConvos={myConvos}
                     getUserNameById={this.getUserNameById}
-                    allUsers={this.state.allUsers}
+                    allUsers={allUsers}
                     openWsConnection={this.openWsConnection}
                     handleSendEvent={this.handleSendEvent}
                     handleNewConvo={this.handleNewConvoSubmit}
