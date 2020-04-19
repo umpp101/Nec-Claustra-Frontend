@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import "./App.css";
 import './Inbox.scss'
-import { fetchUsers, fetchMyConvos, reAuth } from "./api"
+import { fetchUsers, reAuth } from "./api/userFetches"
+import { fetchMyConvos } from "./api/convoFetches"
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
@@ -49,29 +50,16 @@ class App extends Component {
 
   handleLogout = () => {
     localStorage.removeItem("token");
-    this.setState({
-      currentUser: {}
-    });
+    this.setState({currentUser: {}});
     this.props.history.push("/");
   };
 
 
 
   setConvo = (obj) => {
-    this.setState({
-      currentConvo: obj
-    })
+    this.setState({currentConvo: obj})
   }
 
-  fetchUsers = async () => {
-    const response = await fetch("http://localhost:3000/users")
-    const apiData = await response.json();
-    let users = apiData.data.map(el => el.attributes)
-    this.setState({
-      allUsers: users,
-      loading: false
-    })
-  }
   getUserNameById = (id) => {
     if (this.state.allUsers.length !== 0) {
       let user = this.state.allUsers.find(user => user.id === id)
