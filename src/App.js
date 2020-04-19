@@ -4,15 +4,11 @@ import './Inbox.scss'
 import { fetchUsers, reAuth } from "./api/userFetches"
 import { fetchMyConvos, deleteConvo, newConvo } from "./api/convoFetches"
 import { Home, Header, Login, Signup, Inbox} from "./components/index.js";
-
-
-
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 
 class App extends Component {
   constructor() {
     super();
-
     this.state = {
       currentUser: {},
       currentConvo: [],
@@ -30,7 +26,7 @@ class App extends Component {
 
   
   async componentDidUpdate(prevProps, prevState) {
-    if (this.state.myConvos.length !== prevState.myConvos.length){
+    if (this.state.currentConvo !== prevState.currentConvo){
       console.log("started")
       const fetchedMyConvos = await fetchMyConvos(this.state.currentUser)
       this.setState({myConvos: fetchedMyConvos})
@@ -54,6 +50,7 @@ class App extends Component {
   handleNewConvoSubmit = async (receiver) => {
     // e.preventDefault();
     const newlyMadeConvo = await newConvo(receiver, this.state.currentUser)
+    fetchMyConvos(this.state.currentUser)
     this.setState({ currentConvo: newlyMadeConvo });
     this.socket.close()
     console.log(this.socket)
@@ -186,47 +183,24 @@ class App extends Component {
     const { currentUser, currentConvo, allUsers, myConvos} = this.state;
     return (
       <div className="App">
-        <Header 
-        handleLogout={this.handleLogout}
-        currentUser={currentUser} />
+        <Header currentUser={currentUser} handleLogout={this.handleLogout}/>
         <div className="main">
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route
-              exact
-              path="/login"
-              render={props => (
-                <Login {...props} updateCurrentUser={this.updateCurrentUser} />
-              )}
-            />
-            <Route
-              exact
-              path="/signup"
-              render={props => (
-                <Signup {...props} updateCurrentUser={this.updateCurrentUser} />
-              )}
-            />
-            {Object.keys(this.state.currentUser).length !== 0 ? (
-              <Route
-                exact
-                path="/inbox"
-                render={props => (
-                  <Inbox {...props}
-                    currentConvo={currentConvo}
-                    currentUser={currentUser} 
-                    myConvos={myConvos}
+            <Route exact path="/login" render={props => (
+                <Login {...props} updateCurrentUser={this.updateCurrentUser}/>)}/>
+            <Route exact path="/signup" render={props => (   
+                <Signup {...props} updateCurrentUser={this.updateCurrentUser}/>)}/>
+            {Object.keys(this.state.currentUser).length ? ( 
+            <Route exact path="/inbox" render={props => (
+                  <Inbox {...props} currentConvo={currentConvo} allUsers={allUsers} currentUser={currentUser} myConvos={myConvos}
                     getUserNameById={this.getUserNameById}
-                    allUsers={allUsers}
                     openWsConnection={this.openWsConnection}
                     handleSendEvent={this.handleSendEvent}
                     handleNewConvo={this.handleNewConvoSubmit}
                     setConvo={this.setConvo} 
-                    deleteConvo={this.deleteConvo}/>
-                )}
-              />
-            ) : (
-                <Redirect to="/login" />
-              )}
+                    deleteConvo={this.deleteConvo}/>)}/>
+            ) : (<Redirect to="/login" />)}
           </Switch>
         </div>
       </div>
