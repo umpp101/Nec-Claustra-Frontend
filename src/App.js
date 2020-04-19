@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import './Inbox.scss'
+import { fetchUsers } from "./api"
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
@@ -30,9 +31,10 @@ class App extends Component {
   }
 
 
-  componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate(prevProps, prevState) {
     if (this.state.currentUser?.id !== prevState.currentUser?.id) {
-      this.fetchUsers();
+      const fetchedUsers = await fetchUsers()
+      this.setState({allUsers: fetchedUsers})
       this.fetchMyConvos();
     }
   }
