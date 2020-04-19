@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import './Inbox.scss'
-import { fetchUsers, fetchMyConvos } from "./api"
+import { fetchUsers, fetchMyConvos, reAuth } from "./api"
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
@@ -39,28 +39,11 @@ class App extends Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     console.log('comp mounted');
     if (localStorage.getItem("token") !== null) {
-
-      fetch("http://localhost:3000/reAuth", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          'Authorization': localStorage.getItem("token")
-        }
-      })
-        .then(res => res.json())
-        .then((data) => {
-          console.log("User logged in now: ", data);
-          this.setState({
-            currentUser: {
-              id: Number(data.user.data.id),
-              ...data.user.data.attributes
-            }
-          })
-        })
+      const checkedUser = await reAuth()
+      this.setState({currentUser: checkedUser})
     }
   }
 
