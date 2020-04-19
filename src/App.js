@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import './Inbox.scss'
-import { fetchUsers } from "./api"
+import { fetchUsers, fetchMyConvos } from "./api"
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
@@ -25,7 +25,6 @@ class App extends Component {
 
   
   updateCurrentUser = ({ currentUser }) => {
-    
     this.setState({ currentUser })
     this.props.history.push("/inbox");
   }
@@ -35,7 +34,8 @@ class App extends Component {
     if (this.state.currentUser?.id !== prevState.currentUser?.id) {
       const fetchedUsers = await fetchUsers()
       this.setState({allUsers: fetchedUsers})
-      this.fetchMyConvos();
+      const fetchedMyConvos = await fetchMyConvos(this.state.currentUser)
+      this.setState({myConvos: fetchedMyConvos})
     }
   }
 
@@ -72,13 +72,6 @@ class App extends Component {
     this.props.history.push("/");
   };
 
-  fetchMyConvos = async () => {
-    const response = await fetch(`http://localhost:3000/users/${this.state.currentUser.id}/conversations`)
-    const apiData = await response.json()
-    this.setState({
-      myConvos: apiData.conversations
-    })
-  }
 
 
   setConvo = (obj) => {
