@@ -22,7 +22,7 @@ export class UserList extends Component {
                 <div className="about" >
                     <div className="name" onClick={() => this.props.setConvo(this.props.convo)} style={{ marginTop: "inherit" }}>{this.getOtherUserName()}</div>
                 </div>
-                <span style={{ marginLeft: "60%" }} onClick={() => this.props.deleteConvo(this.props.convo)}> X </span>
+                <div style={{ marginLeft: "60%" }} onClick={() => this.props.deleteConvo(this.props.convo)}> X </div>
             </div>
         )
     }

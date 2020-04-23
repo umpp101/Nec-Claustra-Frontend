@@ -43,53 +43,55 @@ export default class Inbox extends Component {
   }
 
   render() {
+    const { allUsers, myConvos, setConvo, getUserNameById, currentUser, deleteConvo, currentConvo, handleSendEvent, handleNewConvo } = this.props;
+    const { searchedTerm, searchedUsers} = this.state;
     return (
       <div className="container clearfix">
         <div className="user-list" id="user-list">
           <Search 
-          allUsers={this.props.allUsers}
+          allUsers={allUsers}
           resetSearch={this.resetSearch}
           searchForUsers={this.searchForUsers}
-          searchedTerm={this.state.searchedTerm}
-          searchedUsers={this.state.searchedUsers}
-          handleNewConvo={this.props.handleNewConvo}
-          myConvos={this.props.myConvos}
-          setConvo={this.props.setConvo}/>
+          searchedTerm={searchedTerm}
+          searchedUsers={searchedUsers}
+          handleNewConvo={handleNewConvo}
+          myConvos={myConvos}
+          setConvo={setConvo}/>
 
-          { this.props.myConvos.length !== 0  ?  
+          { myConvos.length !== 0  ?  
 
-          this.props.myConvos.map(convo =>
+          myConvos.map(convo =>
             <UserList
-                getUserNameById={this.props.getUserNameById}
-                setConvo={this.props.setConvo}
-                allUsers={this.props.allUsers}
+                getUserNameById={getUserNameById}
+                setConvo={setConvo}
+                allUsers={allUsers}
                 convo={convo} key={convo.id}
-                currentUser={this.props.currentUser}
-                deleteConvo={this.props.deleteConvo} />)
+                currentUser={currentUser}
+                deleteConvo={deleteConvo} />)
                 :
                 null
               }
               </div>
 
         <div className="chat">
-        {Object.keys(this.props.currentConvo).length === 0 ? 
+        {Object.keys(currentConvo).length === 0 ? 
         <div className="chat-history">
           <h1> Please select a user to chat with.. </h1>
         </div> :
           <>
           <CurrentChatHeader
-            getUserNameById={this.props.getUserNameById}
-            currentConvo={this.props.currentConvo}
-            currentUser={this.props.currentUser}
-            allUsers={this.props.allUsers} />
+            getUserNameById={getUserNameById}
+            currentConvo={currentConvo}
+            currentUser={currentUser}
+            allUsers={allUsers} />
          <div className="chat-history">
            <Messages
-              getUserNameById={this.props.getUserNameById}
-              currentConvo={this.props.currentConvo}
-              currentUser={this.props.currentUser} />
+              getUserNameById={getUserNameById}
+              currentConvo={currentConvo}
+              currentUser={currentUser} />
           </div>
           <NewMessage
-            handleSendEvent={this.props.handleSendEvent} />
+            handleSendEvent={handleSendEvent} />
           </>
           }
         </div> 
