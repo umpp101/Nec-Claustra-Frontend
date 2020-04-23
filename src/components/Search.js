@@ -8,7 +8,7 @@ export class Search extends Component {
             return this.props.searchedUsers.map(user => {
 
                 return (
-                    <div className="clearfix" onClick={(e) => {this.props.handleNewConvo(e,user); this.props.resetSearch(e,user)}}>
+                    <div className="clearfix" onClick={() => {this.props.handleNewConvo(user); this.props.resetSearch(user)}}>
                         <img src="ChatAvi.png" alt="avatar" className="about" />
                         <div className="about" >
                             <div className="name">{user.user_name}</div>

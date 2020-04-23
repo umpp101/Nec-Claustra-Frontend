@@ -19,19 +19,19 @@ export class Messages extends Component {
             return this.props.currentConvo.messages.map(msg => {
                 if (msg.user_id === this.props.currentUser.id) {
                     return (
-                        <>
-                            <div className="message-data align-right">
+                        <div key={msg.id} >
+                            <div className="message-data align-right" >
                                 <span className="message-data-time" style={{ textAlign: "right", color: "#a8aab1", paddingLeft: "6px" }}>{msg.created_at}</span> &nbsp; &nbsp;
                             <span className="message-data-name" style={{ textAlign: "left", paddingLeft: "6px" }} >You</span>
                             </div>
                             <div className="message other-message float-right">
                                 {msg.content}
                             </div>
-                        </>)
+                        </div>)
                 }
                 else {
                     return (
-                        <>
+                        <div key={msg.id}>
                             <div className="message-data align-left">
                                 <span className="message-data-time" style={{ textAlign: "left", color: "#a8aab1", paddingRight: "6px" }}>{msg.created_at}</span> &nbsp; &nbsp;
                             <span className="message-data-name" style={{ textAlign: "right", paddingRight: "6px" }}> Them </span>
@@ -39,7 +39,7 @@ export class Messages extends Component {
                             <div className="message my-message">
                                 {msg.translated_content}
                             </div>
-                        </>
+                        </div>
                     )
                 }
             })
