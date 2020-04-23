@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default function UserList(props) {
-    
+
     const getOtherUserName = () => {
         if (props.allUsers.length !== 0) {
             let otherUserId;
