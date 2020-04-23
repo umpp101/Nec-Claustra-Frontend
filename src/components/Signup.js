@@ -33,27 +33,22 @@ export default class Login extends Component {
         console.log(resp);
         if (!!resp.error === true) {
           console.log(resp.error)
-        } 
+        }
         else {
           localStorage.setItem("token", resp.jwt);
-          console.log(resp)
           const currentUser = {
             id: resp.user.data.attributes.id,
             user_name: resp.user.data.attributes.user_name,
             language: resp.user.data.attributes.language,
             nationality: resp.user.data.attributes.nationality
           };
-        console.log(currentUser)
-        this.props.updateCurrentUser({ currentUser })
-      }
-    })
+          this.props.updateCurrentUser({ currentUser })
+        }
+      })
   }
 
   handleChange = (e) => {
-    //   console.log(e.target.value)
-    this.setState({
-      [e.target.name]: e.target.value
-    }, () => console.log(this.state))
+    this.setState({[e.target.name]: e.target.value})
   }
 
   render() {

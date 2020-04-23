@@ -1,31 +1,26 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export class UserList extends Component {
-
-    getOtherUserName = () => {
-        if (this.props.allUsers.length !== 0) {
+export default function UserList(props) {
+    
+    const getOtherUserName = () => {
+        if (props.allUsers.length !== 0) {
             let otherUserId;
-            if (this.props.currentUser.id === this.props.convo.receiver_id) {
-                otherUserId = this.props.convo.sender_id
+            if (props.currentUser.id === props.convo.receiver_id) {
+                otherUserId = props.convo.sender_id
             } else {
-                otherUserId = this.props.convo.receiver_id
+                otherUserId = props.convo.receiver_id
             }
-            let otherUser = this.props.allUsers.find(user => user.id === otherUserId)
+            let otherUser = props.allUsers.find(user => user.id === otherUserId)
             return otherUser.user_name
         }
     }
-
-    render() {
-        return (
-            <div className="clearfix" >
-                <img src="ChatAvi.png" alt="avatar" className="about" onClick={() => this.props.setConvo(this.props.convo)} />
-                <div className="about" >
-                    <div className="name" onClick={() => this.props.setConvo(this.props.convo)} style={{ marginTop: "inherit" }}>{this.getOtherUserName()}</div>
-                </div>
-                <div style={{ marginLeft: "60%" }} onClick={() => this.props.deleteConvo(this.props.convo)}> X </div>
+    return (
+        <div className="clearfix" >
+            <img src="ChatAvi.png" alt="avatar" className="about" onClick={() => props.setConvo(props.convo)} />
+            <div className="about" >
+                <div className="name" onClick={() => props.setConvo(props.convo)} style={{ marginTop: "inherit" }}>{getOtherUserName()}</div>
             </div>
-        )
-    }
+            <div style={{ marginLeft: "60%" }} onClick={() => props.deleteConvo(props.convo)}> X </div>
+        </div>
+    )
 }
-
-export default UserList
