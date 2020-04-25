@@ -37,8 +37,7 @@ export const deleteConvo = async(convo) =>{
     try {
         const fetchUrl = (`${url}/conversations/${convo.id}`);
         const response = await fetch(fetchUrl,  {method: 'DELETE'});
-        const postData = await response.json();
-        return postData
+        const postData = await response.json()
     } catch (error) {
         console.log(error)
     }
