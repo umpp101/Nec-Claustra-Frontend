@@ -1,14 +1,14 @@
-import React, { Component } from 'react'
+import React from 'react'
+
+function Search(props) {
 
 
-export class Search extends Component {
-
-    mySuggestions = () => {
-        if (this.props.searchedUsers.length !== 0) {
-            return this.props.searchedUsers.map(user => {
-
+    
+    const mySuggestions = () => {
+        if (props.searchedUsers.length !== 0) {
+            return props.searchedUsers.map(user => {
                 return (
-                    <div className="clearfix" onClick={() => {this.props.handleNewConvo(user); this.props.resetSearch(user)}}>
+                    <div className="clearfix" onClick={() => {props.handleNewConvo(user); props.resetSearch(user)}}>
                         <img src="ChatAvi.png" alt="avatar" className="about" />
                         <div className="about" >
                             <div className="name">{user.user_name}</div>
@@ -17,24 +17,22 @@ export class Search extends Component {
                 )
             })
         }
-        else if (this.props.searchedTerm !== "") {
+        else if (props.searchedTerm !== "") {
             return (
-                <p> `{this.props.searchedTerm}  .. is a user that does'nt exists` </p>
+                <p> `{props.searchedTerm}  .. is a user that doesn't exists` </p>
             )
         }
     }
-    render() {
-        return (
 
-            <div className="search">
+
+    return (
+        <div className="search">
                 <input type="text" placeholder="search"
-                    value={this.props.searchedTerm} onChange={(event) => this.props.searchForUsers(event)} />
-                {this.mySuggestions()}
+                    value={props.searchedTerm} onChange={(event) => props.searchForUsers(event)} />
+                {mySuggestions()}
             </div>
-        )
-    }
+    )
 }
 
 export default Search
-
 

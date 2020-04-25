@@ -5,9 +5,7 @@ $blue: #94C2ED;
 $orange: #E38968;
 $gray: #92959E;
 
-*, *:before, *:after {
-  box-sizing: border-box;
-}
+
 
 body {
   font: 14px/20px "Lato", Arial, sans-serif;
@@ -177,7 +175,7 @@ body {
       margin-bottom: 10px;
       border-radius: 5px;
       resize: none;
-      
+      box-sizing: border-box;
     }
   
     
@@ -224,4 +222,3 @@ body {
 	clear: both;
 	height: 0;
 }
-

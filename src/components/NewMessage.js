@@ -1,48 +1,35 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 
-class NewMessage extends Component {
-    constructor(props) {
-        super(props)
+function NewMessage(props) {
 
-        this.state = {
-            currentChatMessage: "",
+    const [ currentChatMessage, setCurrentChatMessage ] = useState('')
+
+    const handleChange = (e) => {
+        setCurrentChatMessage(e.target.value)
+      }
+      
+    const handleEnter = (e) => {
+        if (e.key === "Enter" && currentChatMessage !== "") {
+            props.handleSendEvent(currentChatMessage, e)
+            setCurrentChatMessage("")
+        }
+    }
+    const handleSendButton = (e) => {
+        if (currentChatMessage !== "") {
+            props.handleSendEvent(currentChatMessage, e);
+            setCurrentChatMessage("")
         }
     }
 
-    handleEnter = (event) => {
-        if (event.key === "Enter" && this.state.currentChatMessage !== "") {
-            this.props.handleSendEvent(this.state.currentChatMessage, event)
-            this.setState({
-                currentChatMessage: ""
-            })
-        }
-    }
-    handleSendButton = (event) => {
-        if (this.state.currentChatMessage !== "") {
-            this.props.handleSendEvent(this.state.currentChatMessage, event);
-            this.setState({
-                currentChatMessage: ""
-            })
-        }
-    }
-    updateCurrentChatMessage = (event) => {
-        //   console.log(event.target.value)
-        this.setState({
-            currentChatMessage: event.target.value
-        });
-    }
-    render() {
-        return (
-            <div className="chat-message clearfix">
+    return (
+        <div className="chat-message clearfix">
                 <textarea name="message-to-send" id="message-to-send"
-                    placeholder="Type your message" rows="3"
-                    value={this.state.currentChatMessage}
-                    onKeyDown={event => this.handleEnter(event)}
-                    onChange={e => this.updateCurrentChatMessage(e)} required></textarea>
-                <button onClick={event => this.handleSendButton(event)}> Send</button>
+                    placeholder="Type your message" rows="3" required 
+                    value={currentChatMessage} onKeyDown={e => handleEnter(e)} onChange={e => handleChange(e)} > 
+                </textarea>
+                <button onClick={e => handleSendButton(e)}> Send</button>
             </div>
-        )
-    }
+    )
 }
 
 export default NewMessage

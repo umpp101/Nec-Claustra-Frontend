@@ -1,28 +1,24 @@
-import React, { Component } from 'react'
 
-export class Messages extends Component {
+import React from 'react'
 
-    getOtherUserName = () => {
-        if (this.props.allUsers.length !== 0) {
-            let otherUserId;
-            if (this.props.currentUser.id === this.props.convo.receiver_id) {
-                otherUserId = this.props.convo.sender_id
-            } else {
-                otherUserId = this.props.convo.receiver_id
-            }
-            let otherUser = this.props.allUsers.find(user => user.id === otherUserId)
-            return otherUser.user_name
-        }
+function Messages(props) {
+
+    const grabTime = (e) => {
+        let realTime = new Date(e).toLocaleTimeString('en-US', { hour12: true, 
+            hour: "numeric", 
+            minute: "numeric"});
+            return realTime
     }
-    myMessages = () => {
-        if (Object.keys(this.props.currentConvo).length !== 0) {
-            return this.props.currentConvo.messages.map(msg => {
-                if (msg.user_id === this.props.currentUser.id) {
+
+    const myMessages = () => {
+        if (Object.keys(props.currentConvo).length !== 0) {
+            return props.currentConvo.messages.map(msg => {
+                if (msg.user_id === props.currentUser.id) {
                     return (
-                        <div key={msg.id} >
+                            <div key={msg.id} >
                             <div className="message-data align-right" >
-                                <span className="message-data-time" style={{ textAlign: "right", color: "#a8aab1", paddingLeft: "6px" }}>{msg.created_at}</span> &nbsp; &nbsp;
-                            <span className="message-data-name" style={{ textAlign: "left", paddingLeft: "6px" }} >You</span>
+                                <span className="message-data-time" >{grabTime(msg.created_at)}</span> &nbsp; &nbsp;
+                            <span className="message-data-name" >You</span>
                             </div>
                             <div className="message other-message float-right">
                                 {msg.content}
@@ -33,8 +29,8 @@ export class Messages extends Component {
                     return (
                         <div key={msg.id}>
                             <div className="message-data align-left">
-                                <span className="message-data-time" style={{ textAlign: "left", color: "#a8aab1", paddingRight: "6px" }}>{msg.created_at}</span> &nbsp; &nbsp;
-                            <span className="message-data-name" style={{ textAlign: "right", paddingRight: "6px" }}> Them </span>
+                            <span className="message-data-name" > Them </span>
+                                <span className="message-data-time" >{grabTime(msg.created_at)}</span> &nbsp; &nbsp;
                             </div>
                             <div className="message my-message">
                                 {msg.translated_content}
@@ -45,16 +41,11 @@ export class Messages extends Component {
             })
         }
     }
-
-
-
-    render() {
-        return (
-            <div>
-                {this.myMessages()}
-            </div>
-        )
-    }
+    return (
+        <div>
+            {myMessages()}
+        </div>
+    )
 }
 
 export default Messages
