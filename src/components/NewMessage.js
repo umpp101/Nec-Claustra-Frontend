@@ -10,13 +10,13 @@ function NewMessage(props) {
       
     const handleEnter = (e) => {
         if (e.key === "Enter" && currentChatMessage !== "") {
-            props.handleSendEvent(currentChatMessage, e)
+            props.handleNewMsg(currentChatMessage, e)
             setCurrentChatMessage("")
         }
     }
     const handleSendButton = (e) => {
         if (currentChatMessage !== "") {
-            props.handleSendEvent(currentChatMessage, e);
+            props.handleNewMsg(currentChatMessage, e);
             setCurrentChatMessage("")
         }
     }

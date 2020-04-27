@@ -43,7 +43,7 @@ export default class Inbox extends Component {
   }
 
   render() {
-    const { allUsers, myConvos, setConvo, getUserNameById, currentUser, deleteConvo, currentConvo, handleSendEvent, handleNewConvo } = this.props;
+    const { allUsers, myConvos, setConvo, getUserNameById, currentUser, deleteConvo, currentConvo, handleNewMsg, handleNewConvo } = this.props;
     const { searchedTerm, searchedUsers} = this.state;
     return (
       <div className="container clearfix">
@@ -91,7 +91,7 @@ export default class Inbox extends Component {
               currentUser={currentUser} />
           </div>
           <NewMessage
-            handleSendEvent={handleSendEvent} />
+            handleNewMsg={handleNewMsg} />
           </>
           }
         </div> 
