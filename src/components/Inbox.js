@@ -43,36 +43,33 @@ export default class Inbox extends Component {
   }
 
   render() {
-    const { allUsers, myConvos, setConvo, getUserNameById, currentUser, deleteConvo, currentConvo, handleNewMsg, handleNewConvo } = this.props;
+    const { allUsers, myConvos, setConvo, getUserNameById, currentUser, deleteConvo, currentConvo, handleSendEvent, handleNewConvo } = this.props;
     const { searchedTerm, searchedUsers} = this.state;
     return (
       <div className="container clearfix">
         <div className="user-list" id="user-list">
-          <Search 
-          allUsers={allUsers}
-          resetSearch={this.resetSearch}
-          searchForUsers={this.searchForUsers}
-          searchedTerm={searchedTerm}
-          searchedUsers={searchedUsers}
-          handleNewConvo={handleNewConvo}
-          myConvos={myConvos}
-          setConvo={setConvo}/>
+          <Search
+            allUsers={allUsers}
+            resetSearch={this.resetSearch}
+            searchForUsers={this.searchForUsers}
+            searchedTerm={searchedTerm}
+            searchedUsers={searchedUsers}
+            handleNewConvo={handleNewConvo}
+            myConvos={myConvos} />
 
-          { myConvos.length !== 0  ?  
-
-          myConvos.map(convo =>
-            <UserList
+          {myConvos.length !== 0 ?
+            myConvos.map(convo =>
+              <UserList
                 getUserNameById={getUserNameById}
                 setConvo={setConvo}
                 allUsers={allUsers}
                 convo={convo} key={convo.id}
                 currentUser={currentUser}
                 deleteConvo={deleteConvo} />)
-                :
-                null
-              }
-              </div>
-
+            :
+            null
+          }
+        </div>
         <div className="chat">
         {Object.keys(currentConvo).length === 0 ? 
         <div className="chat-history">
@@ -80,18 +77,17 @@ export default class Inbox extends Component {
         </div> :
           <>
           <CurrentChatHeader
-            getUserNameById={getUserNameById}
             currentConvo={currentConvo}
             currentUser={currentUser}
             allUsers={allUsers} />
          <div className="chat-history">
            <Messages
-              getUserNameById={getUserNameById}
+              allUsers={allUsers} 
               currentConvo={currentConvo}
               currentUser={currentUser} />
           </div>
           <NewMessage
-            handleNewMsg={handleNewMsg} />
+            handleSendEvent={handleSendEvent} />
           </>
           }
         </div> 

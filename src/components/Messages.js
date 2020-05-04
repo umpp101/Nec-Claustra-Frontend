@@ -1,14 +1,8 @@
 
 import React from 'react'
+import { getUserNameById, messageTime} from "../util/helpers"
 
 function Messages(props) {
-
-    const grabTime = (e) => {
-        let realTime = new Date(e).toLocaleTimeString('en-US', { hour12: true, 
-            hour: "numeric", 
-            minute: "numeric"});
-            return realTime
-    }
 
     const myMessages = () => {
         if (Object.keys(props.currentConvo).length !== 0) {
@@ -17,7 +11,7 @@ function Messages(props) {
                     return (
                             <div key={msg.id} >
                             <div className="message-data align-right" >
-                                <span className="message-data-time" >{grabTime(msg.created_at)}</span> &nbsp; &nbsp;
+                                <span className="message-data-time" >{messageTime(msg.created_at)}</span> &nbsp; &nbsp;
                             <span className="message-data-name" >You</span>
                             </div>
                             <div className="message other-message float-right">
@@ -29,8 +23,8 @@ function Messages(props) {
                     return (
                         <div key={msg.id}>
                             <div className="message-data align-left">
-                            <span className="message-data-name" > Them </span>
-                                <span className="message-data-time" >{grabTime(msg.created_at)}</span> &nbsp; &nbsp;
+                            <span className="message-data-name" > {getUserNameById( msg.user_id, props.allUsers)} </span>
+                                <span className="message-data-time" >{messageTime(msg.created_at)}</span> &nbsp; &nbsp;
                             </div>
                             <div className="message my-message">
                                 {msg.translated_content}
@@ -46,6 +40,7 @@ function Messages(props) {
             {myMessages()}
         </div>
     )
+
 }
 
 export default Messages
