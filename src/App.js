@@ -1,12 +1,12 @@
-import React, { Component } from "react";
 import "./App.css";
-import './Inbox.scss'
+import './Inbox.scss';
+import React, { Component } from "react";
+import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { fetchUsers, reAuth } from "./api/userFetches"
 import { fetchMyConvos, deleteConvo, newConvo } from "./api/convoFetches"
 import { getAlertMsg, getNewMsgBody, getConvoConnecterReq } from "./util/sockets"
-
 import { Home, Header, Login, Signup, Inbox } from "./components/index.js";
-import { Switch, Route, Redirect, withRouter } from "react-router-dom";
+
 
 class App extends Component {
   constructor() {

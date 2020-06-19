@@ -9,8 +9,8 @@ export default class Inbox extends Component {
   constructor(props) {
     super(props)
     this.state = {
-       searchedUsers: [],
-       searchedTerm: ''
+      searchedUsers: [],
+      searchedTerm: ''
     }
   }
 
@@ -29,7 +29,7 @@ export default class Inbox extends Component {
     this.setState({
       searchedTerm: event.target.value
     })
-    let searchResult = event.target.value !== ''? this.props.allUsers.filter(user =>user.user_name.toLowerCase().startsWith(event.target.value.toLowerCase()) && user.user_name !== this.props.currentUser.user_name) : [];
+    let searchResult = event.target.value !== '' ? this.props.allUsers.filter(user => user.user_name.toLowerCase().startsWith(event.target.value.toLowerCase()) && user.user_name !== this.props.currentUser.user_name) : [];
     this.setState({
       searchedUsers: searchResult
     });
@@ -44,7 +44,7 @@ export default class Inbox extends Component {
 
   render() {
     const { allUsers, myConvos, setConvo, getUserNameById, currentUser, deleteConvo, currentConvo, handleSendEvent, handleNewConvo } = this.props;
-    const { searchedTerm, searchedUsers} = this.state;
+    const { searchedTerm, searchedUsers } = this.state;
     return (
       <div className="container clearfix">
         <div className="user-list" id="user-list">
@@ -71,26 +71,26 @@ export default class Inbox extends Component {
           }
         </div>
         <div className="chat">
-        {Object.keys(currentConvo).length === 0 ? 
-        <div className="chat-history">
-          <h1> Please select a user to chat with.. </h1>
-        </div> :
-          <>
-          <CurrentChatHeader
-            currentConvo={currentConvo}
-            currentUser={currentUser}
-            allUsers={allUsers} />
-         <div className="chat-history">
-           <Messages
-              allUsers={allUsers} 
-              currentConvo={currentConvo}
-              currentUser={currentUser} />
-          </div>
-          <NewMessage
-            handleSendEvent={handleSendEvent} />
-          </>
+          {Object.keys(currentConvo).length === 0 ?
+            <div className="chat-history">
+              <h1> Please select a user to chat with.. </h1>
+            </div> :
+            <>
+              <CurrentChatHeader
+                currentConvo={currentConvo}
+                currentUser={currentUser}
+                allUsers={allUsers} />
+              <div className="chat-history">
+                <Messages
+                  allUsers={allUsers}
+                  currentConvo={currentConvo}
+                  currentUser={currentUser} />
+              </div>
+              <NewMessage
+                handleSendEvent={handleSendEvent} />
+            </>
           }
-        </div> 
+        </div>
       </div>
     );
   }
