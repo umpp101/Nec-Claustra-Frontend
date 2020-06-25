@@ -92,6 +92,7 @@ class App extends Component {
 
       // check to see if our  typed message id exists in our "my convos" or currentConvo.messages before we set state
       if (data.type === "confirm_subscription") {
+        console.log('we are confirmed')
         let msg = getConvoConnecterReq(this.state.currentUser);
         this.socket.send(msg)
       }
@@ -99,7 +100,7 @@ class App extends Component {
       else if (data.message && !!data.message.type) {
         // if the message is apart of a convo and a new message
         if (!!data.message.true_message && data.message.type === 'new_message') {
-          this.addMsgToConvo(data.message.true_message);
+          this.addMsgToConvo(data.message.true_message,data.message.name);
         }
         // for any messages related to deleting or creating a convo
         else {
@@ -114,7 +115,7 @@ class App extends Component {
     this.socket.send(msg);
   };
 
-  addMsgToConvo(message) {
+  addMsgToConvo(message,name) {
     console.log(message)
     if (message.conversation_id === this.state.currentConvo.id) {
       console.log(this.state.currentConvo.id);
@@ -123,7 +124,7 @@ class App extends Component {
       this.setState({ currentConvo: newConvo });
     }
     else {
-      notification();
+      notification(name);
       let convos = this.state.myConvos.map((convo) => {
         if (convo.id === message.conversation_id) {
           convo.messages = [...convo.messages, message];
@@ -178,8 +179,8 @@ class App extends Component {
 }
 
 export default withRouter(App);
-let notification = () => {
-  toast('📧 You received a message', {
+let notification = (name) => {
+  toast(`📧 ${name} messaged you!`, {
     position: "top-right",
     autoClose: 3000,
     hideProgressBar: true,
