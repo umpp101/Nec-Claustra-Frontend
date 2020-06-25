@@ -6,6 +6,8 @@ import { fetchUsers, reAuth } from "./api/userFetches"
 import { fetchMyConvos, deleteConvo, newConvo } from "./api/convoFetches"
 import { getAlertMsg, getNewMsgBody, getConvoConnecterReq } from "./util/sockets"
 import { Home, Header, Login, Signup, Inbox } from "./components/index.js";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 class App extends Component {
@@ -19,6 +21,8 @@ class App extends Component {
     };
     this.socket = undefined;
   }
+
+  
 
   updateCurrentUser = ({ currentUser }) => {
     this.setState({ currentUser });
@@ -119,6 +123,7 @@ class App extends Component {
       this.setState({ currentConvo: newConvo });
     }
     else {
+      notification();
       let convos = this.state.myConvos.map((convo) => {
         if (convo.id === message.conversation_id) {
           convo.messages = [...convo.messages, message];
@@ -148,6 +153,7 @@ class App extends Component {
     const { currentUser, currentConvo, allUsers, myConvos } = this.state;
     return (
       <div className="App">
+        <ToastContainer/>
         <Header currentUser={currentUser} handleLogout={this.handleLogout} />
         <div className="main">
           <Switch>
@@ -172,3 +178,15 @@ class App extends Component {
 }
 
 export default withRouter(App);
+let notification = () => {
+  toast('📧 You received a message', {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    });
+}
+
