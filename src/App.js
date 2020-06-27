@@ -24,26 +24,17 @@ class App extends Component {
 
   
 
-  updateCurrentUser = ({ currentUser }) => {
+   updateCurrentUser = async ({ currentUser }) => {
     this.setState({ currentUser });
+    const fetchedMyConvos = await fetchMyConvos(this.state.currentUser);
+    this.setState({ myConvos: fetchedMyConvos });
     this.props.history.push("/inbox");
   };
 
-  async componentDidUpdate(prevProps, prevState) {
-    if (this.state.currentConvo !== prevState.currentConvo) {
-      const fetchedMyConvos = await fetchMyConvos(this.state.currentUser);
-      this.setState({ myConvos: fetchedMyConvos });
-    }
-    if (this.state.currentUser?.id !== prevState.currentUser?.id) {
-      const fetchedUsers = await fetchUsers();
-      this.setState({ allUsers: fetchedUsers });
-      const fetchedMyConvos = await fetchMyConvos(this.state.currentUser);
-      this.setState({ myConvos: fetchedMyConvos });
-      this.props.history.push("/inbox");
-    }
-  }
 
   async componentDidMount() {
+      const fetchedUsers = await fetchUsers();
+      this.setState({ allUsers: fetchedUsers });
     if (localStorage.getItem("token") !== null) {
       const checkedUser = await reAuth();
       this.setState({ currentUser: checkedUser });
@@ -51,7 +42,6 @@ class App extends Component {
   }
   
   handleNewConvoSubmit = async (receiver) => {
-    // e.preventDefault();
     const newlyMadeConvo = await newConvo(receiver, this.state.currentUser);
     this.setState({ currentConvo: newlyMadeConvo });
     let msg = getAlertMsg('create_convo', [receiver.id])
@@ -151,6 +141,7 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.state)
     const { currentUser, currentConvo, allUsers, myConvos } = this.state;
     return (
       <div className="App">
