@@ -10,6 +10,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
+
 class App extends Component {
   constructor() {
     super();
@@ -22,15 +23,15 @@ class App extends Component {
     this.socket = undefined;
   }
 
-  
-
-   updateCurrentUser = async ({ currentUser }) => {
+  updateCurrentUser = ({ currentUser }) => {
     this.setState({ currentUser });
-    const fetchedMyConvos = await fetchMyConvos(this.state.currentUser);
-    this.setState({ myConvos: fetchedMyConvos });
     this.props.history.push("/inbox");
   };
 
+  async componentDidUpdate() {
+      const fetchedMyConvos = await fetchMyConvos(this.state.currentUser);
+      this.setState({ myConvos: fetchedMyConvos });
+  }
 
   async componentDidMount() {
       const fetchedUsers = await fetchUsers();
@@ -65,8 +66,8 @@ class App extends Component {
   };
 
   openWsConnection = async () => {
-    this.socket = new WebSocket("ws://localhost:3000/cable"); // console.log("1 - Socket is open");
-    this.socket.onopen = (e) => {  // console.log("2 - Starting to send a subscription to server");
+    this.socket = new WebSocket("ws://localhost:3000/cable"); 
+    this.socket.onopen = (e) => {  
       let msg = {
         command: "subscribe",
         identifier: JSON.stringify({
@@ -78,11 +79,10 @@ class App extends Component {
 
     this.socket.onmessage = (event) => {
       let data = JSON.parse(event.data);
-      console.log(data)
-
+      // console.log(data)
       // check to see if our  typed message id exists in our "my convos" or currentConvo.messages before we set state
       if (data.type === "confirm_subscription") {
-        console.log('we are confirmed')
+        // console.log('we are confirmed')
         let msg = getConvoConnecterReq(this.state.currentUser);
         this.socket.send(msg)
       }
@@ -106,7 +106,7 @@ class App extends Component {
   };
 
   addMsgToConvo(message,name) {
-    console.log(message)
+    // console.log(message)
     if (message.conversation_id === this.state.currentConvo.id) {
       console.log(this.state.currentConvo.id);
       let newConvo = { ...this.state.currentConvo };
@@ -133,7 +133,7 @@ class App extends Component {
     this.setState({ myConvos: fetchedMyConvos });
     if (message.type === 'delete_convo') {
       let validCurrentConvo = this.state.myConvos.find((convo) => convo.id === this.state.currentConvo.id);
-      console.log(validCurrentConvo);
+      // console.log(validCurrentConvo);
       if (!validCurrentConvo) {
         this.setState({currentConvo: {}})
       }
